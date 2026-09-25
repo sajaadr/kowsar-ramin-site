@@ -1,0 +1,4 @@
+# PERMANENT PRINTED-CARD ROUTE.
+# Do not delete or repurpose /card. Keep this as a temporary redirect (302)
+# so the printed QR can be retargeted later without reprinting cards.
+/card / 302
