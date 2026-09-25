@@ -29,6 +29,8 @@ if ($activeRules.Count -ne 1 -or $activeRules[0] -ne '/card / 302') {
 $html = Get-Content -LiteralPath (Join-Path $Site 'index.html') -Raw
 $mustContain = @(
   'We build, nourish &amp; bring spaces to life.',
+  'RAM &amp; KOW · Music',
+  'Events · Creative Projects · Cultural Exchange',
   'https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu',
   'https://wa.me/989183871647'
 )
@@ -36,6 +38,10 @@ foreach ($needle in $mustContain) {
   if (-not $html.Contains($needle)) {
     throw "index.html is missing expected content: $needle"
   }
+}
+
+if ($html.Contains('Mehr Raam')) {
+  throw 'index.html still contains the retired music-duo name Mehr Raam.'
 }
 
 Write-Host 'PASS source preflight: static site intact; /card invariant is exactly /card / 302.'
