@@ -56,7 +56,7 @@ $mustContain = @(
   'tel:+989183871647',
   'Copy email',
   'Copy phone',
-  'Save contact',
+  'Add to contacts',
   '/assets/kowsar-rahmani.vcf',
   'https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu',
   'https://wa.me/989183871647'
@@ -131,12 +131,22 @@ if ([regex]::Matches($html, 'class="copy-button"').Count -ne 2 -or
     [regex]::Matches($html, 'class="copy-icon"[^>]+aria-hidden="true"').Count -ne 2) {
   throw 'Expected two accessible copy buttons with quiet inline SVG icons.'
 }
-if ([regex]::Matches($html, '<span class="contact-method-label">Email</span>').Count -ne 1 -or
-    [regex]::Matches($html, '<span class="contact-method-label">Phone</span>').Count -ne 1) {
+if ([regex]::Matches($html, '<span class="contact-label contact-method-label">Email</span>').Count -ne 1 -or
+    [regex]::Matches($html, '<span class="contact-label contact-method-label">Phone</span>').Count -ne 1) {
   throw 'Expected one visible Email label and one visible Phone label in the contact panel.'
 }
 if ([regex]::Matches($html, 'class="contact-method"').Count -ne 2) {
   throw 'Expected two independently structured contact methods.'
+}
+if ([regex]::Matches($html, 'class="contact-label').Count -ne 3 -or
+    $html -notmatch '<p class="contact-label contact-eyebrow">Contact</p>') {
+  throw 'Contact, Email, and Phone do not share the common contact-label treatment.'
+}
+if ($html -notmatch '(?s)<div class="contact-kicker">.*?<a class="add-contact" href="/assets/kowsar-rahmani\.vcf" download>.*?Add to contacts.*?</a>.*?</div>') {
+  throw 'The adjacent Add to contacts action is missing from the contact header.'
+}
+if ($html.Contains('Save contact')) {
+  throw 'The superseded Save contact wording remains visible.'
 }
 if ($html -match '<button[^>]+class="copy-button"[^>]*>\s*Copy\s*</button>') {
   throw 'Persistent visible Copy text remains in a copy button.'
@@ -155,6 +165,9 @@ if ($styles -notmatch '(?s)\.contact-card h2\s*\{[^}]*white-space:\s*nowrap;') {
 }
 if ($styles -notmatch '(?s)@media\s*\(min-width:\s*720px\).*?\.contact-card\s*\{[^}]*width:\s*min\(760px,\s*100%\)') {
   throw 'Desktop contact panel does not use the approved 760px balanced width.'
+}
+if ($styles -notmatch '(?s)\.add-contact\s*\{[^}]*border:\s*0;') {
+  throw 'Add to contacts is still rendered as a bordered pill instead of a quiet inline action.'
 }
 if ($styles.Contains('.identity-card li:not(:last-child)::after')) {
   throw 'Decorative capability separator pseudo-elements are still present.'
