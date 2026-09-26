@@ -5,7 +5,11 @@ $Site = Join-Path $Root 'site'
 $Required = @(
   (Join-Path $Site 'index.html'),
   (Join-Path $Site 'styles.css'),
-  (Join-Path $Site '_redirects')
+  (Join-Path $Site '_redirects'),
+  (Join-Path $Site 'assets\hero-front-art.webp'),
+  (Join-Path $Site 'assets\kowsar-badge.webp'),
+  (Join-Path $Site 'assets\together-badge.webp'),
+  (Join-Path $Site 'assets\ramin-badge.webp')
 )
 
 foreach ($path in $Required) {
@@ -28,9 +32,18 @@ if ($activeRules.Count -ne 1 -or $activeRules[0] -ne '/card / 302') {
 
 $html = Get-Content -LiteralPath (Join-Path $Site 'index.html') -Raw
 $mustContain = @(
+  'Kowsar Rahmani &amp; Ramin Fahimi',
   'We build, nourish &amp; bring spaces to life.',
-  'RAM &amp; KOW · Music',
-  'Events · Creative Projects · Cultural Exchange',
+  'Food &amp; Hospitality',
+  'Massage &amp; Wellbeing',
+  'Live music duo',
+  'Events &amp; Creative Projects',
+  'Cultural Exchange',
+  'Woodwork &amp; Carpentry',
+  'Interiors &amp; Painting',
+  'Artisan craft',
+  'View full portfolio',
+  'WhatsApp',
   'https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu',
   'https://wa.me/989183871647'
 )
@@ -40,8 +53,18 @@ foreach ($needle in $mustContain) {
   }
 }
 
-if ($html.Contains('Mehr Raam')) {
-  throw 'index.html still contains the retired music-duo name Mehr Raam.'
+$mustNotContain = @(
+  'class="mark"',
+  'Craft · Hospitality · Massage &amp; Wellbeing · Music · Art',
+  'Singing',
+  'Guitar',
+  'RAM &amp; KOW · Music',
+  'Mehr Raam'
+)
+foreach ($needle in $mustNotContain) {
+  if ($html.Contains($needle)) {
+    throw "index.html contains obsolete starter content: $needle"
+  }
 }
 
-Write-Host 'PASS source preflight: static site intact; /card invariant is exactly /card / 302.'
+Write-Host 'PASS R2 source preflight: final-card content/assets present; static site intact; /card invariant is exactly /card / 302.'
