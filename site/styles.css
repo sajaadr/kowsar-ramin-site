@@ -203,21 +203,25 @@ h1 {
 .contact-card {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 5px;
-  padding: 8px 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "identity save"
+    "methods methods";
+  gap: 5px 10px;
+  padding: 7px 10px;
   border: 1px solid rgba(23, 59, 50, 0.14);
   border-radius: 16px;
   background: rgba(255, 249, 237, 0.66);
   font-family: Georgia, "Times New Roman", serif;
 }
 
-.contact-heading,
+.contact-identity { grid-area: identity; align-self: center; }
+
 .contact-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
 }
 
 .contact-eyebrow {
@@ -237,7 +241,27 @@ h1 {
   line-height: 1;
   white-space: nowrap;
 }
-.contact-methods { display: grid; gap: 3px; }
+.contact-methods {
+  grid-area: methods;
+  display: grid;
+  gap: 3px;
+}
+
+.contact-method {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.contact-method-label {
+  color: var(--terracotta);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
 .contact-value {
   min-width: 0;
@@ -265,7 +289,7 @@ h1 {
   text-decoration: none;
 }
 
-.save-contact { min-height: 32px; padding: 5px 10px; }
+.save-contact { grid-area: save; align-self: center; min-height: 32px; padding: 5px 10px; }
 .copy-button {
   width: 36px;
   min-width: 36px;
@@ -326,7 +350,7 @@ h1 {
   .identity-card { height: 94px; }
   .identity-icon { width: 50px; height: 50px; }
   .identity-content { padding-top: 5px; padding-bottom: 5px; }
-  .contact-card { gap: 3px; padding-top: 6px; padding-bottom: 6px; }
+  .contact-card { gap: 3px 10px; padding-top: 6px; padding-bottom: 6px; }
 }
 
 @media (min-width: 720px) {
@@ -351,12 +375,17 @@ h1 {
   .instagram-cta { margin-top: 5px; font-size: 13px; }
   .actions { width: min(540px, 100%); margin: 0 auto; }
   .contact-card {
-    width: min(620px, 100%);
+    width: min(760px, 100%);
     margin: 0 auto;
-    grid-template-columns: 1.2fr 1.5fr;
+    grid-template-columns: minmax(150px, 0.9fr) minmax(0, 2.2fr) auto;
+    grid-template-areas: "identity methods save";
+    column-gap: 20px;
     align-items: center;
-    padding: 10px 12px;
+    padding: 11px 14px;
   }
+  .contact-methods { grid-template-columns: minmax(0, 1.35fr) minmax(145px, 0.85fr); gap: 16px; }
+  .contact-method { display: block; }
+  .contact-method-label { display: block; margin-bottom: 3px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

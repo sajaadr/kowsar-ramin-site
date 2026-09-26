@@ -131,6 +131,13 @@ if ([regex]::Matches($html, 'class="copy-button"').Count -ne 2 -or
     [regex]::Matches($html, 'class="copy-icon"[^>]+aria-hidden="true"').Count -ne 2) {
   throw 'Expected two accessible copy buttons with quiet inline SVG icons.'
 }
+if ([regex]::Matches($html, '<span class="contact-method-label">Email</span>').Count -ne 1 -or
+    [regex]::Matches($html, '<span class="contact-method-label">Phone</span>').Count -ne 1) {
+  throw 'Expected one visible Email label and one visible Phone label in the contact panel.'
+}
+if ([regex]::Matches($html, 'class="contact-method"').Count -ne 2) {
+  throw 'Expected two independently structured contact methods.'
+}
 if ($html -match '<button[^>]+class="copy-button"[^>]*>\s*Copy\s*</button>') {
   throw 'Persistent visible Copy text remains in a copy button.'
 }
@@ -145,6 +152,9 @@ if ($styles -notmatch '(?s)\.contact-value\s*\{[^}]*font-family:\s*Georgia,\s*"T
 }
 if ($styles -notmatch '(?s)\.contact-card h2\s*\{[^}]*white-space:\s*nowrap;') {
   throw 'Contact name is not protected from an avoidable desktop line wrap.'
+}
+if ($styles -notmatch '(?s)@media\s*\(min-width:\s*720px\).*?\.contact-card\s*\{[^}]*width:\s*min\(760px,\s*100%\)') {
+  throw 'Desktop contact panel does not use the approved 760px balanced width.'
 }
 if ($styles.Contains('.identity-card li:not(:last-child)::after')) {
   throw 'Decorative capability separator pseudo-elements are still present.'
