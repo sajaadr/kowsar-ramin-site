@@ -203,11 +203,8 @@ h1 {
 .contact-card {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "identity"
-    "methods";
-  gap: 5px 10px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 3px 8px;
   padding: 7px 10px;
   border: 1px solid rgba(23, 59, 50, 0.14);
   border-radius: 16px;
@@ -215,14 +212,12 @@ h1 {
   font-family: Georgia, "Times New Roman", serif;
 }
 
-.contact-identity { grid-area: identity; align-self: center; }
+.contact-identity,
+.contact-kicker,
+.contact-methods,
+.contact-method { display: contents; }
 
-.contact-kicker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
+.contact-label { align-self: center; }
 
 .contact-row {
   display: flex;
@@ -243,32 +238,12 @@ h1 {
 
 .contact-eyebrow { margin: 0; }
 
-.contact-card h2 {
-  color: var(--forest-deep);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-}
-.contact-methods {
-  grid-area: methods;
-  display: grid;
-  gap: 3px;
-}
-
-.contact-method {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  align-items: center;
-  gap: 7px;
-}
-
 .contact-method-label {
   display: inline-block;
 }
 
-.contact-value {
+.contact-value,
+.add-contact {
   min-width: 0;
   color: var(--forest-deep);
   font-family: Georgia, "Times New Roman", serif;
@@ -297,17 +272,16 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  min-height: 32px;
-  padding: 5px 4px;
+  justify-self: start;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
   border: 0;
   border-radius: 7px;
   background: transparent;
-  color: var(--forest);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 11px;
-  font-weight: 750;
   line-height: 1;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .add-contact-icon {
@@ -414,27 +388,18 @@ h1 {
 @media (min-width: 900px) {
   .contact-card {
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, 0.9fr);
-    grid-template-areas: none;
+    grid-template-rows: 32px 36px;
     column-gap: 18px;
     align-items: start;
   }
 
-  .contact-identity,
-  .contact-method {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 32px 36px;
-    row-gap: 3px;
-    align-items: center;
-  }
-
-  .contact-identity { grid-area: auto; }
-  .contact-methods { display: contents; }
-  .contact-kicker { height: 32px; }
+  .contact-eyebrow { grid-column: 1; grid-row: 1; }
+  .add-contact { grid-column: 1; grid-row: 2; }
+  .contact-method:first-child .contact-method-label { grid-column: 2; grid-row: 1; }
+  .contact-method:first-child .contact-row { grid-column: 2; grid-row: 2; }
+  .contact-method:last-child .contact-method-label { grid-column: 3; grid-row: 1; }
+  .contact-method:last-child .contact-row { grid-column: 3; grid-row: 2; }
   .contact-method-label {
-    display: flex;
-    align-items: center;
-    height: 32px;
     margin: 0;
   }
   .contact-row { height: 36px; }

@@ -139,8 +139,11 @@ if ([regex]::Matches($html, 'class="contact-method"').Count -ne 2) {
   throw 'Expected two independently structured contact methods.'
 }
 if ([regex]::Matches($html, 'class="contact-label').Count -ne 3 -or
-    $html -notmatch '<p class="contact-label contact-eyebrow">Contact</p>') {
+    $html -notmatch '<p id="contact-title" class="contact-label contact-eyebrow">Contact</p>') {
   throw 'Contact, Email, and Phone do not share the common contact-label treatment.'
+}
+if ($html -match '<h2 id="contact-title">Kowsar Rahmani</h2>') {
+  throw 'The superseded contact-card name remains visible.'
 }
 if ($html -notmatch '(?s)<div class="contact-kicker">.*?<a class="add-contact" href="/assets/kowsar-rahmani\.vcf" download>.*?Add to contacts.*?</a>.*?</div>') {
   throw 'The adjacent Add to contacts action is missing from the contact header.'
@@ -157,11 +160,11 @@ if ($html -notmatch '<script\s+src="/contact\.js"\s+defer></script>') {
 }
 
 $styles = Get-Content -LiteralPath (Join-Path $Site 'styles.css') -Raw
-if ($styles -notmatch '(?s)\.contact-value\s*\{[^}]*font-family:\s*Georgia,\s*"Times New Roman",\s*serif;') {
-  throw 'Contact email and telephone do not use the same Georgia serif family as the contact name.'
+if ($styles -notmatch '(?s)\.contact-value,\s*\.add-contact\s*\{[^}]*font-family:\s*Georgia,\s*"Times New Roman",\s*serif;') {
+  throw 'Add to contacts, email, and telephone do not share the approved Georgia value typography.'
 }
-if ($styles -notmatch '(?s)\.contact-card h2\s*\{[^}]*white-space:\s*nowrap;') {
-  throw 'Contact name is not protected from an avoidable desktop line wrap.'
+if ($styles -notmatch '(?s)\.contact-card\s*\{[^}]*grid-template-columns:\s*max-content\s+minmax\(0,\s*1fr\)') {
+  throw 'Mobile contact values do not share one label-sized alignment column.'
 }
 if ($styles -notmatch '(?s)@media\s*\(min-width:\s*720px\).*?\.contact-card\s*\{[^}]*width:\s*min\(760px,\s*100%\)') {
   throw 'Desktop contact panel does not use the approved 760px balanced width.'
