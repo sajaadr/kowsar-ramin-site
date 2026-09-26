@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $PSScriptRoot
 $Site = Join-Path $Root 'site'
 $Required = @(
+  (Join-Path $Root '.gitattributes'),
   (Join-Path $Site 'index.html'),
   (Join-Path $Site 'styles.css'),
   (Join-Path $Site 'contact.js'),
@@ -120,6 +121,11 @@ $vcf = [System.Text.Encoding]::UTF8.GetString($vcfBytes)
 $expectedVcf = "BEGIN:VCARD`r`nVERSION:3.0`r`nN:Rahmani;Kowsar;;;`r`nFN:Kowsar Rahmani`r`nEMAIL;TYPE=INTERNET:kosar.rahmani@gmail.com`r`nTEL;TYPE=CELL:+989183871647`r`nEND:VCARD`r`n"
 if ($vcf -ne $expectedVcf) {
   throw 'vCard bytes do not match the exact UTF-8 vCard 3.0 CRLF contract.'
+}
+
+$gitAttributes = Get-Content -LiteralPath (Join-Path $Root '.gitattributes') -Raw
+if ($gitAttributes -notmatch '(?m)^site/assets/\*\.vcf\s+-text\s*$') {
+  throw 'Git transport must preserve vCard CRLF bytes with site/assets/*.vcf -text.'
 }
 
 Write-Host 'PASS R3 source preflight: social/contact contract present; vCard exact; static site intact; /card invariant is exactly /card / 302.'
