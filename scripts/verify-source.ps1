@@ -5,7 +5,9 @@ $Site = Join-Path $Root 'site'
 $Required = @(
   (Join-Path $Site 'index.html'),
   (Join-Path $Site 'styles.css'),
+  (Join-Path $Site 'contact.js'),
   (Join-Path $Site '_redirects'),
+  (Join-Path $Site 'assets\kowsar-rahmani.vcf'),
   (Join-Path $Site 'assets\hero-front-art.webp'),
   (Join-Path $Site 'assets\kowsar-badge.webp'),
   (Join-Path $Site 'assets\together-badge.webp'),
@@ -44,6 +46,17 @@ $mustContain = @(
   'Artisan craft',
   'View full portfolio',
   'WhatsApp',
+  'https://www.instagram.com/kowsar_rahmanii/',
+  'https://www.instagram.com/ramin.kow/',
+  'https://www.instagram.com/woodmerit/',
+  'kosar.rahmani@gmail.com',
+  '+989183871647',
+  'mailto:kosar.rahmani@gmail.com',
+  'tel:+989183871647',
+  'Copy email',
+  'Copy phone',
+  'Save contact',
+  '/assets/kowsar-rahmani.vcf',
   'https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu',
   'https://wa.me/989183871647'
 )
@@ -67,4 +80,46 @@ foreach ($needle in $mustNotContain) {
   }
 }
 
-Write-Host 'PASS R2 source preflight: final-card content/assets present; static site intact; /card invariant is exactly /card / 302.'
+$instagramLinks = @(
+  'https://www.instagram.com/kowsar_rahmanii/',
+  'https://www.instagram.com/ramin.kow/',
+  'https://www.instagram.com/woodmerit/'
+)
+foreach ($url in $instagramLinks) {
+  $pattern = '<a[^>]+class="identity-card[^\"]*"[^>]+href="' + [regex]::Escape($url) + '"'
+  if ($html -notmatch $pattern) {
+    throw "Instagram destination is not implemented as a full identity-card anchor: $url"
+  }
+}
+
+if ($html -notmatch '<script\s+src="/contact\.js"\s+defer></script>') {
+  throw 'contact.js is not loaded as the sole deferred contact enhancement.'
+}
+
+$styles = Get-Content -LiteralPath (Join-Path $Site 'styles.css') -Raw
+if ($styles.Contains('.identity-card li:not(:last-child)::after')) {
+  throw 'Decorative capability separator pseudo-elements are still present.'
+}
+if ($styles -notmatch '@media\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)') {
+  throw 'Fine-pointer hover interaction is missing.'
+}
+if ($styles -notmatch 'prefers-reduced-motion:\s*reduce') {
+  throw 'Reduced-motion handling is missing.'
+}
+
+$script = Get-Content -LiteralPath (Join-Path $Site 'contact.js') -Raw
+foreach ($needle in @('navigator.clipboard', 'writeText', 'execCommand', 'aria-live')) {
+  if (-not $script.Contains($needle)) {
+    throw "contact.js is missing required clipboard/fallback behavior: $needle"
+  }
+}
+
+$vcfPath = Join-Path $Site 'assets\kowsar-rahmani.vcf'
+$vcfBytes = [System.IO.File]::ReadAllBytes($vcfPath)
+$vcf = [System.Text.Encoding]::UTF8.GetString($vcfBytes)
+$expectedVcf = "BEGIN:VCARD`r`nVERSION:3.0`r`nN:Rahmani;Kowsar;;;`r`nFN:Kowsar Rahmani`r`nEMAIL;TYPE=INTERNET:kosar.rahmani@gmail.com`r`nTEL;TYPE=CELL:+989183871647`r`nEND:VCARD`r`n"
+if ($vcf -ne $expectedVcf) {
+  throw 'vCard bytes do not match the exact UTF-8 vCard 3.0 CRLF contract.'
+}
+
+Write-Host 'PASS R3 source preflight: social/contact contract present; vCard exact; static site intact; /card invariant is exactly /card / 302.'

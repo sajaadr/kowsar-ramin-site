@@ -9,6 +9,7 @@
   <title>Kowsar Rahmani &amp; Ramin Fahimi</title>
   <link rel="icon" href="data:," />
   <link rel="stylesheet" href="/styles.css" />
+  <script src="/contact.js" defer></script>
 </head>
 <body>
   <main class="page">
@@ -21,35 +22,56 @@
     </header>
 
     <section class="identities" aria-label="Our work">
-      <article class="identity-card">
-        <img src="/assets/kowsar-badge.webp" width="640" height="480" alt="Hands holding a lotus, representing Kowsar" />
+      <a class="identity-card identity-card--kowsar" href="https://www.instagram.com/kowsar_rahmanii/" target="_blank" rel="noopener noreferrer" aria-label="Kowsar Rahmani on Instagram">
+        <span class="identity-icon"><img src="/assets/kowsar-badge.webp" width="640" height="480" alt="" /></span>
         <div>
           <h2>Kowsar Rahmani</h2>
           <ul><li>Food &amp; Hospitality</li><li>Massage &amp; Wellbeing</li></ul>
         </div>
-      </article>
+      </a>
 
-      <article class="identity-card">
-        <img src="/assets/together-badge.webp" width="640" height="480" alt="Overlapping warm circles and musical notes, representing Together" />
+      <a class="identity-card identity-card--together" href="https://www.instagram.com/ramin.kow/" target="_blank" rel="noopener noreferrer" aria-label="Together on Instagram">
+        <span class="identity-icon"><img src="/assets/together-badge.webp" width="640" height="480" alt="" /></span>
         <div>
           <h2>Together</h2>
           <ul><li>Live music duo</li><li>Events &amp; Creative Projects</li><li>Cultural Exchange</li></ul>
         </div>
-      </article>
+      </a>
 
-      <article class="identity-card">
-        <img src="/assets/ramin-badge.webp" width="640" height="480" alt="A woodworking plane shaping wood, representing Ramin" />
+      <a class="identity-card identity-card--ramin" href="https://www.instagram.com/woodmerit/" target="_blank" rel="noopener noreferrer" aria-label="Ramin Fahimi on Instagram">
+        <span class="identity-icon"><img src="/assets/ramin-badge.webp" width="640" height="480" alt="" /></span>
         <div>
           <h2>Ramin Fahimi</h2>
           <ul><li>Woodwork &amp; Carpentry</li><li>Interiors &amp; Painting</li><li>Artisan craft</li></ul>
         </div>
-      </article>
+      </a>
     </section>
 
     <nav class="actions" aria-label="Primary links">
       <a class="button primary" href="https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu">View full portfolio</a>
       <a class="button secondary" href="https://wa.me/989183871647">WhatsApp</a>
     </nav>
+
+    <section class="contact-card" aria-labelledby="contact-title">
+      <div class="contact-heading">
+        <div>
+          <p class="contact-eyebrow">Contact</p>
+          <h2 id="contact-title">Kowsar Rahmani</h2>
+        </div>
+        <a class="save-contact" href="/assets/kowsar-rahmani.vcf" download>Save contact</a>
+      </div>
+      <div class="contact-methods">
+        <div class="contact-row">
+          <a id="contact-email" class="contact-value" href="mailto:kosar.rahmani@gmail.com">kosar.rahmani@gmail.com</a>
+          <button class="copy-button" type="button" data-copy-target="contact-email" aria-label="Copy email">Copy</button>
+        </div>
+        <div class="contact-row">
+          <a id="contact-phone" class="contact-value" href="tel:+989183871647">+989183871647</a>
+          <button class="copy-button" type="button" data-copy-target="contact-phone" aria-label="Copy phone">Copy</button>
+        </div>
+      </div>
+      <p class="copy-status" aria-live="polite" role="status"></p>
+    </section>
   </main>
 </body>
 </html>
