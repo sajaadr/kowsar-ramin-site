@@ -227,8 +227,8 @@ h1 {
 .contact-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px;
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 .contact-label {
@@ -322,7 +322,8 @@ h1 {
 .copy-button {
   width: 36px;
   min-width: 36px;
-  min-height: 32px;
+  height: 36px;
+  min-height: 36px;
   padding: 6px;
   border-radius: 9px;
   cursor: pointer;
@@ -379,7 +380,7 @@ h1 {
   .identity-card { height: 94px; }
   .identity-icon { width: 50px; height: 50px; }
   .identity-content { padding-top: 5px; padding-bottom: 5px; }
-  .contact-card { gap: 3px 10px; padding-top: 6px; padding-bottom: 6px; }
+  .contact-card { gap: 3px 10px; padding-top: 2px; padding-bottom: 2px; }
 }
 
 @media (min-width: 720px) {
@@ -406,15 +407,37 @@ h1 {
   .contact-card {
     width: min(760px, 100%);
     margin: 0 auto;
-    grid-template-columns: minmax(230px, 1fr) minmax(0, 2fr);
-    grid-template-areas: "identity methods";
-    column-gap: 24px;
-    align-items: center;
     padding: 11px 14px;
   }
-  .contact-methods { grid-template-columns: minmax(0, 1.35fr) minmax(145px, 0.85fr); gap: 16px; }
-  .contact-method { display: block; }
-  .contact-method-label { display: block; margin-bottom: 3px; }
+}
+
+@media (min-width: 900px) {
+  .contact-card {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, 0.9fr);
+    grid-template-areas: none;
+    column-gap: 18px;
+    align-items: start;
+  }
+
+  .contact-identity,
+  .contact-method {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 32px 36px;
+    row-gap: 3px;
+    align-items: center;
+  }
+
+  .contact-identity { grid-area: auto; }
+  .contact-methods { display: contents; }
+  .contact-kicker { height: 32px; }
+  .contact-method-label {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    margin: 0;
+  }
+  .contact-row { height: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
