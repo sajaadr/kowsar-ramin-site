@@ -209,6 +209,7 @@ h1 {
   border: 1px solid rgba(23, 59, 50, 0.14);
   border-radius: 16px;
   background: rgba(255, 249, 237, 0.66);
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .contact-heading,
@@ -234,12 +235,14 @@ h1 {
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
+  white-space: nowrap;
 }
 .contact-methods { display: grid; gap: 3px; }
 
 .contact-value {
   min-width: 0;
   color: var(--forest-deep);
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 14px;
   font-weight: 650;
   overflow-wrap: anywhere;
@@ -350,7 +353,7 @@ h1 {
   .contact-card {
     width: min(620px, 100%);
     margin: 0 auto;
-    grid-template-columns: 1fr 1.7fr;
+    grid-template-columns: 1.2fr 1.5fr;
     align-items: center;
     padding: 10px 12px;
   }

@@ -140,6 +140,12 @@ if ($html -notmatch '<script\s+src="/contact\.js"\s+defer></script>') {
 }
 
 $styles = Get-Content -LiteralPath (Join-Path $Site 'styles.css') -Raw
+if ($styles -notmatch '(?s)\.contact-value\s*\{[^}]*font-family:\s*Georgia,\s*"Times New Roman",\s*serif;') {
+  throw 'Contact email and telephone do not use the same Georgia serif family as the contact name.'
+}
+if ($styles -notmatch '(?s)\.contact-card h2\s*\{[^}]*white-space:\s*nowrap;') {
+  throw 'Contact name is not protected from an avoidable desktop line wrap.'
+}
 if ($styles.Contains('.identity-card li:not(:last-child)::after')) {
   throw 'Decorative capability separator pseudo-elements are still present.'
 }
