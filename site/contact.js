@@ -34,12 +34,11 @@
         copied = fallbackCopy(value);
       }
       window.clearTimeout(clearStatus);
-      const originalLabel = button.dataset.defaultLabel || button.textContent;
-      button.dataset.defaultLabel = originalLabel;
-      if (copied) button.textContent = 'Copied';
+      document.querySelectorAll('[data-copy-target]').forEach((copyButton) => copyButton.classList.remove('is-copied'));
+      if (copied) button.classList.add('is-copied');
       status.textContent = copied ? 'Copied' : 'Select the text to copy';
       clearStatus = window.setTimeout(() => {
-        button.textContent = originalLabel;
+        button.classList.remove('is-copied');
         status.textContent = '';
       }, 1800);
     });

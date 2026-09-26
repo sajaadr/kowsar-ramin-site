@@ -96,12 +96,12 @@ h1 {
 
 .identity-card {
   --icon-x: 0;
-  --icon-y: -1%;
-  --icon-scale: 1.07;
+  --icon-y: -8%;
+  --icon-scale: 1.08;
   display: grid;
   grid-template-columns: 58px minmax(0, 1fr);
   align-items: center;
-  min-height: 83px;
+  height: 96px;
   padding: 6px 10px 6px 6px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -109,12 +109,13 @@ h1 {
   box-shadow: 0 7px 20px rgba(45, 52, 42, 0.055);
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
   transition: transform 170ms ease, box-shadow 170ms ease, border-color 170ms ease, background-color 170ms ease;
 }
 
-.identity-card--kowsar { --icon-x: 0.5%; --icon-y: -1.5%; }
-.identity-card--together { --icon-x: 0.5%; --icon-y: -2.5%; --icon-scale: 1.08; }
-.identity-card--ramin { --icon-y: -7%; --icon-scale: 1.1; }
+.identity-card--kowsar { --icon-x: 0.5%; --icon-y: -12%; --icon-scale: 1.08; }
+.identity-card--together { --icon-x: 1%; --icon-y: -8%; --icon-scale: 1.09; }
+.identity-card--ramin { --icon-y: -20%; --icon-scale: 1.08; }
 
 .identity-icon {
   display: block;
@@ -132,18 +133,41 @@ h1 {
   transform: translate(var(--icon-x), var(--icon-y)) scale(var(--icon-scale));
 }
 
-.identity-card h2 { margin-bottom: 2px; font-size: 19px; line-height: 1.05; }
+.identity-content {
+  align-self: stretch;
+  min-width: 0;
+  padding: 7px 0 6px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
 
-.identity-card ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 12px;
-  margin: 0;
-  padding: 0;
+.identity-card h2 { font-size: 19px; line-height: 1.05; }
+
+.service-text {
+  margin: 2px 0 0;
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.28;
-  list-style: none;
+  line-height: 1.22;
+}
+
+.instagram-cta {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--forest);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.external-link-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .actions { display: grid; grid-template-columns: 1.35fr 1fr; gap: 8px; }
@@ -204,7 +228,13 @@ h1 {
   text-transform: uppercase;
 }
 
-.contact-card h2 { font-size: 16px; line-height: 1; }
+.contact-card h2 {
+  color: var(--forest-deep);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
 .contact-methods { display: grid; gap: 3px; }
 
 .contact-value {
@@ -233,7 +263,28 @@ h1 {
 }
 
 .save-contact { min-height: 32px; padding: 5px 10px; }
-.copy-button { min-width: 52px; min-height: 28px; padding: 3px 9px; cursor: pointer; }
+.copy-button {
+  width: 36px;
+  min-width: 36px;
+  min-height: 32px;
+  padding: 6px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.copy-icon,
+.copy-check {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.copy-check { display: none; }
+.copy-button.is-copied .copy-icon { display: none; }
+.copy-button.is-copied .copy-check { display: block; }
 
 .save-contact:focus-visible,
 .copy-button:focus-visible,
@@ -269,9 +320,10 @@ h1 {
   .page { gap: 7px; padding-bottom: 7px; }
   .hero { min-height: 126px; }
   .hero-copy { padding-top: 66px; padding-bottom: 9px; }
-  .identity-card { min-height: 77px; }
+  .identity-card { height: 94px; }
   .identity-icon { width: 50px; height: 50px; }
-  .contact-card { padding-top: 7px; padding-bottom: 7px; }
+  .identity-content { padding-top: 5px; padding-bottom: 5px; }
+  .contact-card { gap: 3px; padding-top: 6px; padding-bottom: 6px; }
 }
 
 @media (min-width: 720px) {
@@ -283,14 +335,17 @@ h1 {
   .identities { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .identity-card {
     grid-template-columns: 1fr;
+    grid-template-rows: 88px minmax(0, 1fr);
     justify-items: center;
-    min-height: 190px;
-    padding: 16px;
+    height: 214px;
+    padding: 14px 16px;
     text-align: center;
   }
   .identity-icon { width: 88px; height: 88px; }
-  .identity-card h2 { margin: 8px 0 5px; font-size: 24px; }
-  .identity-card ul { display: block; font-size: 15px; }
+  .identity-content { width: 100%; padding: 6px 0 0; }
+  .identity-card h2 { font-size: 24px; }
+  .service-text { margin-top: 4px; font-size: 15px; line-height: 1.25; }
+  .instagram-cta { margin-top: 5px; font-size: 13px; }
   .actions { width: min(540px, 100%); margin: 0 auto; }
   .contact-card {
     width: min(620px, 100%);

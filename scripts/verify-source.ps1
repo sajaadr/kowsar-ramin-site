@@ -93,6 +93,48 @@ foreach ($url in $instagramLinks) {
   }
 }
 
+$visibleText = [System.Net.WebUtility]::HtmlDecode([regex]::Replace($html, '<[^>]+>', ' '))
+foreach ($handle in @('@kowsar_rahmanii', 'kowsar_rahmanii', '@ramin.kow', 'ramin.kow', '@woodmerit', 'woodmerit')) {
+  if ($visibleText.Contains($handle)) {
+    throw "Instagram handle is present in visible text: $handle"
+  }
+}
+
+if ([regex]::Matches($html, '<span class="instagram-cta-text">View Instagram</span>').Count -ne 3) {
+  throw 'Expected exactly three visible View Instagram CTA labels.'
+}
+if ([regex]::Matches($html, 'class="external-link-icon"[^>]+aria-hidden="true"').Count -ne 3) {
+  throw 'Expected exactly three aria-hidden external-link SVG icons.'
+}
+
+$serviceParagraphs = @(
+  'Food &amp; Hospitality, Massage &amp; Wellbeing',
+  'Live music duo, Events &amp; Creative Projects, Cultural Exchange',
+  'Woodwork &amp; Carpentry, Interiors &amp; Painting, Artisan craft'
+)
+foreach ($service in $serviceParagraphs) {
+  if ($html -notmatch ('<p class="service-text">' + [regex]::Escape($service) + '</p>')) {
+    throw "Missing exact coherent service paragraph: $service"
+  }
+}
+if ($html -match '<ul>|<li>') {
+  throw 'Legacy list/flex service presentation remains in the identity cards.'
+}
+
+foreach ($label in @('Open Kowsar Rahmani on Instagram', 'Open Together on Instagram', 'Open Ramin Fahimi on Instagram')) {
+  if (-not $html.Contains('aria-label="' + $label + '"')) {
+    throw "Missing exact human-readable Instagram accessible label: $label"
+  }
+}
+
+if ([regex]::Matches($html, 'class="copy-button"').Count -ne 2 -or
+    [regex]::Matches($html, 'class="copy-icon"[^>]+aria-hidden="true"').Count -ne 2) {
+  throw 'Expected two accessible copy buttons with quiet inline SVG icons.'
+}
+if ($html -match '<button[^>]+class="copy-button"[^>]*>\s*Copy\s*</button>') {
+  throw 'Persistent visible Copy text remains in a copy button.'
+}
+
 if ($html -notmatch '<script\s+src="/contact\.js"\s+defer></script>') {
   throw 'contact.js is not loaded as the sole deferred contact enhancement.'
 }
@@ -114,6 +156,12 @@ foreach ($needle in @('navigator.clipboard', 'writeText', 'execCommand', 'aria-l
     throw "contact.js is missing required clipboard/fallback behavior: $needle"
   }
 }
+if ($script -notmatch "classList\.(add|toggle)\('is-copied'") {
+  throw 'contact.js does not expose the temporary copied icon state.'
+}
+if ($script.Contains("button.textContent = 'Copied'")) {
+  throw 'contact.js still replaces the compact icon with persistent text content.'
+}
 
 $vcfPath = Join-Path $Site 'assets\kowsar-rahmani.vcf'
 $vcfBytes = [System.IO.File]::ReadAllBytes($vcfPath)
@@ -128,4 +176,4 @@ if ($gitAttributes -notmatch '(?m)^site/assets/\*\.vcf\s+-text\s*$') {
   throw 'Git transport must preserve vCard CRLF bytes with site/assets/*.vcf -text.'
 }
 
-Write-Host 'PASS R3 source preflight: social/contact contract present; vCard exact; static site intact; /card invariant is exactly /card / 302.'
+Write-Host 'PASS R4 source preflight: exact Instagram affordances/services present; no visible handles; compact copy icons; vCard exact; /card invariant preserved.'
