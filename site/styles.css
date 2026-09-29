@@ -4,6 +4,7 @@
   --forest: #173b32;
   --forest-deep: #102c26;
   --terracotta: #c86438;
+  --terracotta-text: #a94f2b;
   --gold: #e5a93c;
   --ink: #23312c;
   --muted: #555e58;
@@ -51,7 +52,7 @@ body {
 .hero-art {
   position: absolute;
   inset: 0;
-  background: url("/assets/hero-mobile.webp") center center / cover no-repeat;
+  background: url("/assets/hero-mobile.26024fe148c4.webp") center center / cover no-repeat;
 }
 
 .hero-art::after {
@@ -245,9 +246,9 @@ h1 span { display: block; }
 }
 
 .contact-label {
-  color: var(--terracotta);
+  color: var(--terracotta-text);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.09em;
@@ -316,8 +317,16 @@ h1 span { display: block; }
 }
 
 .copy-button {
+  position: relative;
   font: inherit;
   cursor: pointer;
+}
+
+/* Invisible hit area: >=44px effective target without enlarging the visible 42/40px box. */
+.copy-button::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
 }
 
 .copy-icon,
@@ -419,7 +428,7 @@ h1 span { display: block; }
   }
 
   .hero-art {
-    background-image: url("/assets/hero-desktop.webp");
+    background-image: url("/assets/hero-desktop.51bb0d5c0c1c.webp");
     background-position: center center;
   }
 

@@ -1,0 +1,18 @@
+# Repo-controlled Cloudflare Pages response headers (R6 precision hardening).
+# HTML, CSS, JS, vCard, favicons and the permanent /card route keep default revalidation.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; connect-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+# Content-hash fingerprinted heavy visuals only: bytes never change under these names.
+/assets/hero-desktop.51bb0d5c0c1c.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/hero-mobile.26024fe148c4.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/social-preview-1200x630.fcc87c79c255.jpg
+  Cache-Control: public, max-age=31536000, immutable
