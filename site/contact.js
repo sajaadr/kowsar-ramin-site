@@ -1,6 +1,7 @@
 (() => {
   const status = document.querySelector('[aria-live]');
   const canonicalUrl = 'https://kowsar-ramin.pages.dev/';
+  const shareUrl = canonicalUrl + '?utm_source=share&utm_medium=referral&utm_campaign=kowsar_ramin';
   const shareTitle = 'Meet Kowsar & Ramin — Work & Collaboration';
   const shareText = 'Kowsar & Ramin work across hospitality, wellbeing, craftsmanship, music and creative projects, and welcome bookings, commissions, collaborations and selected volunteer opportunities.';
   let clearStatus;
@@ -52,6 +53,7 @@
       });
 
       if (copied) {
+        window.krAnalytics?.capture('contact_action', { method: button.dataset.copyTarget === 'contact-email' ? 'copy_email' : 'copy_phone' });
         button.classList.add('is-copied');
         announce('Copied');
         window.setTimeout(() => button.classList.remove('is-copied'), 1800);
@@ -63,13 +65,15 @@
 
   const shareButton = document.getElementById('share-page');
   shareButton?.addEventListener('click', async () => {
+    window.krAnalytics?.capture('share_action', { method: 'requested' });
     if (navigator.share) {
       try {
         await navigator.share({
           title: shareTitle,
           text: shareText,
-          url: canonicalUrl,
+          url: shareUrl,
         });
+        window.krAnalytics?.capture('share_action', { method: 'native_completed' });
         return;
       } catch (error) {
         if (error?.name === 'AbortError') return;
@@ -78,10 +82,11 @@
 
     let copied = false;
     try {
-      copied = await copyText(canonicalUrl);
+      copied = await copyText(shareUrl);
     } catch {
-      copied = fallbackCopy(canonicalUrl);
+      copied = fallbackCopy(shareUrl);
     }
-    announce(copied ? 'Link copied' : 'Copy this link: ' + canonicalUrl);
+    if (copied) window.krAnalytics?.capture('share_action', { method: 'fallback_copied' });
+    announce(copied ? 'Link copied' : 'Copy this link: ' + shareUrl);
   });
 })();

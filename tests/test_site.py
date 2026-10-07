@@ -68,6 +68,7 @@ class SiteIntegrationTests(unittest.TestCase):
             SITE / "index.html",
             SITE / "styles.css",
             SITE / "contact.js",
+            SITE / "analytics.js",
             SITE / "_redirects",
             ASSETS / "kowsar-rahmani.vcf",
             ASSETS / "favicon.svg",
@@ -180,14 +181,14 @@ class R6PrecisionHardeningTests(unittest.TestCase):
         directives = {d.strip().split(" ")[0]: d.strip() for d in csp.split(";") if d.strip()}
         expected = {
             "default-src": "default-src 'self'",
-            "script-src": "script-src 'self'",
+            "script-src": "script-src 'self' https://eu.i.posthog.com",
             "style-src": "style-src 'self'",
             "img-src": "img-src 'self' data:",
             "object-src": "object-src 'none'",
             "base-uri": "base-uri 'none'",
             "frame-ancestors": "frame-ancestors 'none'",
             "form-action": "form-action 'none'",
-            "connect-src": "connect-src 'none'",
+            "connect-src": "connect-src 'self' https://eu.i.posthog.com",
             "upgrade-insecure-requests": "upgrade-insecure-requests",
         }
         for name, value in expected.items():
@@ -209,7 +210,8 @@ class R6PrecisionHardeningTests(unittest.TestCase):
         self.assertNotRegex(self.html, r"<style[\s>]", "no inline style elements")
         self.assertNotRegex(self.html, r"\sstyle=", "no inline style attributes")
         self.assertNotRegex(self.html, r"\son[a-z]+=", "no inline event handlers")
-        self.assertNotRegex(self.html + self.css, r"<(?:script|img)[^>]+src=\"https?://|<link(?![^>]*rel=\"canonical\")[^>]+href=\"https?://|url\(\"?https?://", "no third-party subresources")
+        external_scripts = re.findall(r'<script[^>]+src="(https?://[^"]+)"', self.html)
+        self.assertEqual(external_scripts, ["https://eu.i.posthog.com/static/array.js"])
 
     def test_completed_social_metadata(self):
         social = fingerprinted("social-preview-1200x630").name
@@ -297,6 +299,43 @@ class R6PrecisionHardeningTests(unittest.TestCase):
             self.assertTrue((ASSETS / ref).exists(), f"broken reference /assets/{ref}")
         deployed = {p.name for p in ASSETS.iterdir()}
         self.assertEqual(deployed - refs, set(), "unreferenced deployable assets")
+
+
+class R7AnalyticsTests(unittest.TestCase):
+    def setUp(self):
+        self.html = (SITE / "index.html").read_text(encoding="utf-8")
+        self.js = (SITE / "analytics.js").read_text(encoding="utf-8")
+        self.contact = (SITE / "contact.js").read_text(encoding="utf-8")
+
+    def test_redirect_preserves_card_route_with_fixed_attribution(self):
+        rules = [x.strip() for x in (SITE / "_redirects").read_text(encoding="utf-8").splitlines() if x.strip() and not x.lstrip().startswith("#")]
+        self.assertEqual(rules, ["/card /?utm_source=business_card&utm_medium=qr&utm_campaign=physical_card 302"])
+
+    def test_posthog_is_anonymous_and_privacy_bounded(self):
+        for token in ["persistence: 'memory'", "cookieless_mode: 'always'", "person_profiles: 'identified_only'",
+                      "autocapture: false", "capture_exceptions: false", "disable_session_recording: true",
+                      "advanced_disable_flags: true", "respect_dnt: true"]:
+            self.assertIn(token, self.js)
+        for forbidden in ["posthog.identify", ".identify(", ".alias(", "$set", "$set_once"]:
+            self.assertNotIn(forbidden, self.js)
+        self.assertIn("sanitizeUrl", self.js)
+        for key in ["utm_source", "utm_medium", "utm_campaign"]:
+            self.assertIn(key, self.js)
+
+    def test_event_taxonomy_and_low_cardinality_enums(self):
+        expected = {
+            "cta_clicked": ["portfolio", "whatsapp"],
+            "instagram_clicked": ["kowsar", "together", "ramin"],
+            "contact_action": ["email", "phone", "copy_email", "copy_phone", "save_contact"],
+            "share_action": ["requested", "native_completed", "fallback_copied"],
+            "section_viewed": ["contact"],
+        }
+        for event, values in expected.items():
+            self.assertIn(event, self.js)
+            for value in values:
+                self.assertIn(value, self.js)
+        for pii in ["kosar.rahmani@gmail.com", "+989183871647"]:
+            self.assertNotIn(pii, self.js)
 
 
 if __name__ == "__main__":

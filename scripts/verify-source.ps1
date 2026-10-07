@@ -3,7 +3,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 $Site = Join-Path $Root 'site'
 
 $required = @(
-  'index.html', 'styles.css', 'contact.js', '_redirects', '_headers',
+  'index.html', 'styles.css', 'contact.js', 'analytics.js', '_redirects', '_headers',
   'assets\kowsar-rahmani.vcf', 'assets\hero-desktop.51bb0d5c0c1c.webp', 'assets\hero-mobile.26024fe148c4.webp',
   'assets\favicon.svg', 'assets\favicon-32.png', 'assets\favicon.ico',
   'assets\apple-touch-icon.png', 'assets\social-preview-1200x630.fcc87c79c255.jpg',
@@ -15,7 +15,7 @@ foreach ($relative in $required) {
 if (Test-Path -LiteralPath (Join-Path $Root 'functions')) { throw 'Site must remain static.' }
 
 $expectedProtected = [ordered]@{
-  '_redirects' = 'c25556b76cbac32b49632c1807d7c752278352f44fd32f95f864b12d658dc95c'
+  '_redirects' = 'b068f6f00576f8f7fc8f84987eb38513aa83183417c4ab2340bd5febad93f7eb'
   'assets\kowsar-badge.webp' = '50b63d05ebc51e9118711765d7500755314487396d8701654f1fc78fe3667076'
   'assets\together-badge.webp' = '47ffed8b8a4fb0565e52aa19fdd18e7f59184a4c218ae18cb4c960802a7ee3b2'
   'assets\ramin-badge.webp' = '2a31a415e03ac7e18898e9befc617183a4ac5a281608d1f1f73488229406f493'
@@ -26,7 +26,7 @@ foreach ($entry in $expectedProtected.GetEnumerator()) {
 }
 
 $activeRules = @(Get-Content -LiteralPath (Join-Path $Site '_redirects') | ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') })
-if ($activeRules.Count -ne 1 -or $activeRules[0] -cne '/card / 302') { throw 'Expected exactly one active redirect: /card / 302' }
+if ($activeRules.Count -ne 1 -or $activeRules[0] -cne '/card /?utm_source=business_card&utm_medium=qr&utm_campaign=physical_card 302') { throw 'Expected exactly one attributed temporary /card redirect.' }
 
 $html = Get-Content -LiteralPath (Join-Path $Site 'index.html') -Raw
 $mustContain = @(
@@ -72,7 +72,7 @@ foreach ($name in @('hero-desktop.51bb0d5c0c1c.webp', 'hero-mobile.26024fe148c4.
 
 # R6 security and cache headers.
 $headers = Get-Content -LiteralPath (Join-Path $Site '_headers') -Raw
-foreach ($needle in @("default-src 'self'", "script-src 'self'", "style-src 'self'", "img-src 'self' data:", "object-src 'none'", "base-uri 'none'", "frame-ancestors 'none'", "form-action 'none'", "connect-src 'none'", 'upgrade-insecure-requests', 'X-Content-Type-Options: nosniff', 'Referrer-Policy: strict-origin-when-cross-origin', 'X-Frame-Options: DENY', 'camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'usb=()')) {
+foreach ($needle in @("default-src 'self'", "script-src 'self' https://eu.i.posthog.com", "style-src 'self'", "img-src 'self' data:", "object-src 'none'", "base-uri 'none'", "frame-ancestors 'none'", "form-action 'none'", "connect-src 'self' https://eu.i.posthog.com", 'upgrade-insecure-requests', 'X-Content-Type-Options: nosniff', 'Referrer-Policy: strict-origin-when-cross-origin', 'X-Frame-Options: DENY', 'camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'usb=()')) {
   if (-not $headers.Contains($needle)) { throw "_headers missing: $needle" }
 }
 foreach ($forbidden in @('unsafe-inline', 'unsafe-eval', 'web-share', 'clipboard')) { if ($headers.Contains($forbidden)) { throw "_headers must not contain: $forbidden" } }
@@ -93,6 +93,14 @@ $refs = @([regex]::Matches($sources, '/assets/([A-Za-z0-9._-]+)') | ForEach-Obje
 foreach ($ref in $refs) { if (-not (Test-Path -LiteralPath (Join-Path $Site "assets\$ref"))) { throw "Broken asset reference: $ref" } }
 foreach ($file in Get-ChildItem -LiteralPath (Join-Path $Site 'assets') -File) { if ($refs -notcontains $file.Name) { throw "Unreferenced deployable asset: $($file.Name)" } }
 
+$analytics = Get-Content -LiteralPath (Join-Path $Site 'analytics.js') -Raw
+foreach ($needle in @("persistence: 'memory'", "cookieless_mode: 'always'", "autocapture: false", "disable_session_recording: true", "advanced_disable_flags: true", 'cta_clicked', 'instagram_clicked', 'contact_action', 'share_action', 'section_viewed')) {
+  if (-not $analytics.Contains($needle)) { throw "analytics.js missing: $needle" }
+}
+foreach ($forbidden in @('posthog.identify', '.identify(', '.alias(', '$set', '$set_once')) {
+  if ($analytics.Contains($forbidden)) { throw "analytics.js forbidden identity behavior: $forbidden" }
+}
+
 $script = Get-Content -LiteralPath (Join-Path $Site 'contact.js') -Raw
 foreach ($needle in @('navigator.share', 'navigator.clipboard', "document.execCommand('copy')", "const shareTitle = 'Meet Kowsar & Ramin — Work & Collaboration'", "const canonicalUrl = 'https://kowsar-ramin.pages.dev/'", "announce(copied ? 'Link copied'")) {
   if (-not $script.Contains($needle)) { throw "contact.js missing: $needle" }
@@ -106,4 +114,4 @@ if ($vcf -cne $expectedVcf) { throw 'vCard bytes do not match the exact R5 UTF-8
 $gitAttributes = Get-Content -LiteralPath (Join-Path $Root '.gitattributes') -Raw
 if ($gitAttributes -notmatch '(?m)^site/assets/\*\.vcf\s+-text\s*$') { throw 'Git must preserve vCard CRLF bytes.' }
 
-Write-Host 'PASS R6 source preflight: R5 identity/services/metadata/contact/share/vCard/route/protected hashes plus R6 headers, fingerprints, contrast, hit areas and asset hygiene verified.'
+Write-Host 'PASS R7 source preflight: R5 identity/services/metadata/contact/share/vCard/route/protected hashes plus R6 headers, fingerprints, contrast, hit areas and asset hygiene verified.'
