@@ -131,7 +131,7 @@ class SiteIntegrationTests(unittest.TestCase):
 
     def test_vcard_has_url(self):
         vcf = (ASSETS / "kowsar-rahmani.vcf").read_text(encoding="utf-8")
-        self.assertIn("URL:https://kowsar-ramin.pages.dev/", vcf)
+        self.assertIn("URL;TYPE=WORK:https://kowsar-ramin.pages.dev/", vcf)
 
     def test_asset_dimensions(self):
         expected = {
@@ -336,6 +336,29 @@ class R7AnalyticsTests(unittest.TestCase):
                 self.assertIn(value, self.js)
         for pii in ["kosar.rahmani@gmail.com", "+989183871647"]:
             self.assertNotIn(pii, self.js)
+
+    def test_rich_vcard_identity_context_and_photo(self):
+        path = ASSETS / "kowsar-rahmani.vcf"
+        raw = path.read_bytes()
+        self.assertIn(b"\r\n", raw)
+        text = raw.decode("utf-8")
+        required = [
+            "VERSION:3.0",
+            "N:Rahmani;Kowsar;;;",
+            "FN:Kowsar Rahmani",
+            "ORG:Kowsar & Ramin · Iran",
+            "TITLE:Music, Craft & Creative Projects",
+            "URL;TYPE=WORK:https://kowsar-ramin.pages.dev/",
+            "X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/kowsar_rahmanii/",
+            "URL;TYPE=Instagram:https://www.instagram.com/kowsar_rahmanii/",
+            "UID:urn:uuid:c17e8489-084d-5bb5-9ba6-168d0647462b",
+            "PHOTO;ENCODING=b;TYPE=JPEG:",
+            "NOTE:From Iran. Kowsar & Ramin work across music and creative projects\\, woodwork\\, hospitality and wellbeing. For bookings\\, collaborations\\, commissions and other opportunities.",
+        ]
+        for token in required:
+            self.assertIn(token, text)
+        self.assertGreater(len(raw), 20_000)
+        self.assertLess(len(raw), 60_000)
 
 
 if __name__ == "__main__":

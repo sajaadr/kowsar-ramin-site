@@ -107,9 +107,25 @@ foreach ($needle in @('navigator.share', 'navigator.clipboard', "document.execCo
 }
 
 $vcfPath = Join-Path $Site 'assets\kowsar-rahmani.vcf'
-$vcf = [System.Text.Encoding]::UTF8.GetString([System.IO.File]::ReadAllBytes($vcfPath))
-$expectedVcf = "BEGIN:VCARD`r`nVERSION:3.0`r`nN:Rahmani;Kowsar;;;`r`nFN:Kowsar Rahmani`r`nEMAIL;TYPE=INTERNET:kosar.rahmani@gmail.com`r`nTEL;TYPE=CELL:+989183871647`r`nURL:https://kowsar-ramin.pages.dev/`r`nEND:VCARD`r`n"
-if ($vcf -cne $expectedVcf) { throw 'vCard bytes do not match the exact R5 UTF-8 CRLF contract.' }
+$vcfBytes = [System.IO.File]::ReadAllBytes($vcfPath)
+$vcf = [System.Text.Encoding]::UTF8.GetString($vcfBytes)
+foreach ($needle in @(
+  'VERSION:3.0',
+  'N:Rahmani;Kowsar;;;',
+  'FN:Kowsar Rahmani',
+  'ORG:Kowsar & Ramin · Iran',
+  'TITLE:Music, Craft & Creative Projects',
+  'URL;TYPE=WORK:https://kowsar-ramin.pages.dev/',
+  'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/kowsar_rahmanii/',
+  'URL;TYPE=Instagram:https://www.instagram.com/kowsar_rahmanii/',
+  'UID:urn:uuid:c17e8489-084d-5bb5-9ba6-168d0647462b',
+  'PHOTO;ENCODING=b;TYPE=JPEG:',
+  'NOTE:From Iran. Kowsar & Ramin work across music and creative projects\, woodwork\, hospitality and wellbeing. For bookings\, collaborations\, commissions and other opportunities.'
+)) {
+  if (-not $vcf.Contains($needle)) { throw "Enhanced vCard missing: $needle" }
+}
+if ($vcfBytes.Length -lt 20000 -or $vcfBytes.Length -gt 60000) { throw "Enhanced vCard size out of expected range: $($vcfBytes.Length)" }
+if (-not $vcf.Contains("`r`n")) { throw 'Enhanced vCard must preserve CRLF line endings.' }
 
 $gitAttributes = Get-Content -LiteralPath (Join-Path $Root '.gitattributes') -Raw
 if ($gitAttributes -notmatch '(?m)^site/assets/\*\.vcf\s+-text\s*$') { throw 'Git must preserve vCard CRLF bytes.' }
