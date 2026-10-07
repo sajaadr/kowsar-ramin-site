@@ -181,7 +181,7 @@ class R6PrecisionHardeningTests(unittest.TestCase):
         directives = {d.strip().split(" ")[0]: d.strip() for d in csp.split(";") if d.strip()}
         expected = {
             "default-src": "default-src 'self'",
-            "script-src": "script-src 'self' https://eu.i.posthog.com",
+            "script-src": "script-src 'self' https://eu.i.posthog.com https://static.cloudflareinsights.com",
             "style-src": "style-src 'self'",
             "img-src": "img-src 'self' data:",
             "object-src": "object-src 'none'",
