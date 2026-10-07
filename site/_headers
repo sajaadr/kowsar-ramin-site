@@ -1,7 +1,7 @@
 # Repo-controlled Cloudflare Pages response headers (R6 precision hardening).
 # HTML, CSS, JS, vCard, favicons and the permanent /card route keep default revalidation.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://eu.i.posthog.com https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; connect-src 'self' https://eu.i.posthog.com; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://eu.i.posthog.com https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; connect-src 'self' https://eu.i.posthog.com https://cloudflareinsights.com; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

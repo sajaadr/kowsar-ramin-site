@@ -72,7 +72,7 @@ foreach ($name in @('hero-desktop.51bb0d5c0c1c.webp', 'hero-mobile.26024fe148c4.
 
 # R6 security and cache headers.
 $headers = Get-Content -LiteralPath (Join-Path $Site '_headers') -Raw
-foreach ($needle in @("default-src 'self'", "script-src 'self' https://eu.i.posthog.com https://static.cloudflareinsights.com", "style-src 'self'", "img-src 'self' data:", "object-src 'none'", "base-uri 'none'", "frame-ancestors 'none'", "form-action 'none'", "connect-src 'self' https://eu.i.posthog.com", 'upgrade-insecure-requests', 'X-Content-Type-Options: nosniff', 'Referrer-Policy: strict-origin-when-cross-origin', 'X-Frame-Options: DENY', 'camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'usb=()')) {
+foreach ($needle in @("default-src 'self'", "script-src 'self' https://eu.i.posthog.com https://static.cloudflareinsights.com", "style-src 'self'", "img-src 'self' data:", "object-src 'none'", "base-uri 'none'", "frame-ancestors 'none'", "form-action 'none'", "connect-src 'self' https://eu.i.posthog.com https://cloudflareinsights.com", 'upgrade-insecure-requests', 'X-Content-Type-Options: nosniff', 'Referrer-Policy: strict-origin-when-cross-origin', 'X-Frame-Options: DENY', 'camera=()', 'microphone=()', 'geolocation=()', 'payment=()', 'usb=()')) {
   if (-not $headers.Contains($needle)) { throw "_headers missing: $needle" }
 }
 foreach ($forbidden in @('unsafe-inline', 'unsafe-eval', 'web-share', 'clipboard')) { if ($headers.Contains($forbidden)) { throw "_headers must not contain: $forbidden" } }

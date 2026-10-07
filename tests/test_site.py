@@ -188,7 +188,7 @@ class R6PrecisionHardeningTests(unittest.TestCase):
             "base-uri": "base-uri 'none'",
             "frame-ancestors": "frame-ancestors 'none'",
             "form-action": "form-action 'none'",
-            "connect-src": "connect-src 'self' https://eu.i.posthog.com",
+            "connect-src": "connect-src 'self' https://eu.i.posthog.com https://cloudflareinsights.com",
             "upgrade-insecure-requests": "upgrade-insecure-requests",
         }
         for name, value in expected.items():
