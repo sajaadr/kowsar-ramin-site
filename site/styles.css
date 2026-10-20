@@ -107,7 +107,8 @@ h1 span { display: block; }
   display: grid;
   grid-template-columns: 58px minmax(0, 1fr);
   align-items: center;
-  height: 96px;
+  min-height: 96px;
+  height: auto;
   padding: 6px 10px 6px 6px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -413,7 +414,7 @@ h1 span { display: block; }
   .page { gap: 5px; padding-bottom: 7px; }
   .hero { min-height: 130px; }
   .hero-copy { padding-top: 64px; padding-bottom: 10px; }
-  .identity-card { height: 94px; }
+  .identity-card { min-height: 94px; height: auto; }
   .identity-icon { width: 50px; height: 50px; }
   .identity-content { padding-top: 5px; padding-bottom: 5px; }
   .contact-card { padding-top: 8px; padding-bottom: 8px; }
@@ -448,7 +449,8 @@ h1 span { display: block; }
     grid-template-columns: 1fr;
     grid-template-rows: 88px minmax(0, 1fr);
     justify-items: center;
-    height: 214px;
+    min-height: 214px;
+    height: auto;
     padding: 14px 16px;
     text-align: center;
   }

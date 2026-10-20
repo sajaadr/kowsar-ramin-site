@@ -61,6 +61,7 @@ def main():
                       const root = document.documentElement;
                       const cards = [...document.querySelectorAll('.identity-card')];
                       const compact = [...document.querySelectorAll('.button, .contact-card, .share-button')];
+                      const hero = document.querySelector('.hero');
                       const box = el => ({clientW:el.clientWidth, scrollW:el.scrollWidth, clientH:el.clientHeight, scrollH:el.scrollHeight});
                       return {
                         lang: root.lang,
@@ -69,6 +70,7 @@ def main():
                         innerWidth: innerWidth,
                         cards: cards.map(box),
                         compact: compact.map(box),
+                        hero: box(hero),
                         emailDir: getComputedStyle(document.querySelector('#contact-email')).direction,
                         phoneDir: getComputedStyle(document.querySelector('#contact-phone')).direction
                       };
@@ -83,6 +85,9 @@ def main():
                     for idx, box in enumerate(metrics["cards"]):
                         if box["scrollH"] > box["clientH"] + 2 or box["scrollW"] > box["clientW"] + 2:
                             failures.append(f"{code}/{name}: identity-card[{idx}] overflow {box}")
+                    hero_box = metrics["hero"]
+                    if hero_box["scrollH"] > hero_box["clientH"] + 2 or hero_box["scrollW"] > hero_box["clientW"] + 2:
+                        failures.append(f"{code}/{name}: hero overflow {hero_box}")
                     for idx, box in enumerate(metrics["compact"]):
                         if box["scrollW"] > box["clientW"] + 2:
                             failures.append(f"{code}/{name}: compact[{idx}] horizontal overflow {box}")
