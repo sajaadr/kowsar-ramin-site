@@ -639,3 +639,59 @@ html[dir="rtl"] .language-panel { right: auto; left: 0; }
   .language-chevron { transition: none; }
 }
 
+/* Persian-only type study — Vazirmatn v33.003, original non-Latin variable WOFF2.
+   Preview only. The source binary is 47,972 bytes and SIL OFL 1.1 licensed.
+   The CDN is version-pinned; production should ideally vendor the font locally. */
+@font-face {
+  font-family: "KR Vazirmatn";
+  src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Non-Latin/fonts/webfonts/Vazirmatn-NL%5Bwght%5D.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+html[lang="fa"] body,
+html[lang="fa"] h1,
+html[lang="fa"] h2,
+html[lang="fa"] .language-menu,
+html[lang="fa"] .contact-label,
+html[lang="fa"] .contact-value,
+html[lang="fa"] .add-contact {
+  font-family: "KR Vazirmatn", Tahoma, system-ui, sans-serif;
+}
+
+html[lang="fa"] body { line-height: 1.5; }
+
+html[lang="fa"] .identity {
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+html[lang="fa"] h1 {
+  font-size: clamp(22px, 6vw, 40px);
+  font-weight: 700;
+  line-height: 1.42;
+  letter-spacing: normal;
+}
+
+html[lang="fa"] .identity-card h2 {
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+html[lang="fa"] .service-text { line-height: 1.5; }
+
+html[lang="fa"] .contact-label {
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.45;
+}
+
+html[lang="fa"] .contact-intent,
+html[lang="fa"] .share-prompt,
+html[lang="fa"] .language-option { line-height: 1.5; }
+
+html[lang="fa"] .button,
+html[lang="fa"] .share-button { line-height: 1.4; }
