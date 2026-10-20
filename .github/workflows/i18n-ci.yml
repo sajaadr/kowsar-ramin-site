@@ -2,9 +2,10 @@ name: i18n qualification
 
 on:
   push:
-    branches: [i18n-localization-prep]
+    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read

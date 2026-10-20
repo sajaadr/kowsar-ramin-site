@@ -1,3 +1,5 @@
+> **Historical QA record.** The scores and early candidate identifiers below document the original i18n implementation, not the latest deployed revision or native-speaker certification. The current release is documented in the repository README; responsive/browser acceptance is enforced by the CI workflow.
+
 # Kowsar & Ramin I18N — 10-Wave QA Report
 
 **Candidate:** `KR_LOCALIZATION/1 v1.0.0-candidate`  
