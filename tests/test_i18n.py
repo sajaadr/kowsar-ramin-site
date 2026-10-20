@@ -111,6 +111,16 @@ class I18nTests(unittest.TestCase):
                     "meta.image_alt", "share.title", "share.text"):
             self.assertIn("کوثر و رامین", persian[key])
 
+    def test_persian_font_preview_is_scoped_and_csp_explicit(self):
+        css = (SITE / "styles.css").read_text(encoding="utf-8")
+        headers = (SITE / "_headers").read_text(encoding="utf-8")
+        self.assertIn('font-family: "KR Estedad"', css)
+        self.assertIn('html[lang="fa"] body', css)
+        self.assertIn('Estedad%5Bwght%5D.woff2', css)
+        self.assertIn('font-display: swap', css)
+        self.assertIn("font-src 'self' https://cdn.jsdelivr.net;", headers)
+        self.assertIn("style-src 'self';", headers)
+
     def test_dynamic_localization_data_present(self):
         attrs = [
             "data-share-title", "data-share-text", "data-status-copied",

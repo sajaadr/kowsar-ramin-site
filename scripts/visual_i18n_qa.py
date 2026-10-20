@@ -96,6 +96,19 @@ def main():
                     if code == "fa" and (metrics["emailDir"] != "ltr" or metrics["phoneDir"] != "ltr"):
                         failures.append(f"fa/{name}: mixed-Latin contact fields not LTR")
 
+                    if code == "fa":
+                        font_state = page.evaluate("""() => {
+                          const face = [...document.fonts].find(
+                            item => item.family.replace(/["']/g, '') === 'KR Estedad'
+                          );
+                          return {
+                            family: getComputedStyle(document.body).fontFamily,
+                            face: face ? face.status : 'missing',
+                          };
+                        }""")
+                        if "KR Estedad" not in font_state["family"] or font_state["face"] != "loaded":
+                            failures.append(f"fa/{name}: font not loaded {font_state}")
+
                     trigger = page.locator(".language-menu summary")
                     if not trigger.is_visible():
                         failures.append(f"{code}/{name}: language trigger not visible")
