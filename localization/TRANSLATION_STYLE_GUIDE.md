@@ -7,7 +7,7 @@ Warm, capable, human, plain and internationally understandable. The site should 
 - Preserve intent and naturalness over literal word order.
 - Prefer common everyday professional vocabulary.
 - Avoid jargon, bureaucratic phrasing, inflated claims and marketing superlatives.
-- Keep proper names and brand names stable.
+- Keep personal names stable in identity, but use their approved local-script spellings in Persian: `کوثر رحمانی`, `رامین فهیمی`, and joint identity `کوثر و رامین`.
 - Preserve the compact middle-dot structure of service and opportunity lines.
 - Keep CTAs short enough for mobile.
 - Translate visible text, metadata, share-sheet content, status messages and accessibility labels together.
@@ -30,7 +30,7 @@ Warm, capable, human, plain and internationally understandable. The site should 
 - **ქართული (`ka`)** — standard modern Georgian.
 
 ## Meaning decisions
-- **Together** remains the project/identity label `Together`; do not translate it as an ordinary adverb.
+- **Together** is the duo identity and MUST be displayed in each language's natural translation, including in accessibility labels; only the English page uses `Together`. Approved localized labels: `Birlikte` (tr), `Gemeinsam` (de), `Juntos` (es/pt), `Insieme` (it), `با هم` (fa), `Ensemble` (fr), `Birlikdə` (az), `Միասին` (hy), `ერთად` (ka). Do not change machine-readable `data-profile="together"`, image paths or social account URLs.
 - **Wellbeing** is rendered as the most natural broad non-clinical concept available in each language.
 - **Commissions** means paid/custom commissioned work, not sales commission.
 - **Bookings** means reservations/bookings for work, music, hospitality or events.
