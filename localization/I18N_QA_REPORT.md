@@ -44,3 +44,30 @@
 - Language links use native labels plus `lang` and `hreflang`.
 - Localized metadata/share/status/ARIA strings exist.
 - Mobile/desktop regression and Persian bidi QA.
+
+## Evidence-backed qualification checkpoint — 2026-10-20
+
+The first rendered qualification run correctly **failed** Wave 6/UI-fit because fixed-height service cards clipped longer localized copy in Turkish, German, Spanish, Portuguese, Italian, French, Azerbaijani, Armenian and Georgian. Armenian exposed the largest expansion. The candidate was **not promoted**.
+
+Remediation:
+- service cards changed from fixed heights to preserved minimum heights with natural expansion;
+- Turkish hero agreement was corrected from mixed person marking to `İnşa ediyoruz, özen gösteriyoruz ve / mekânlara hayat katıyoruz.`;
+- Turkish social-preview alt text was aligned with the corrected grammar;
+- the visual test was strengthened to include hero overflow checks.
+
+Final qualifying runs for commit `8152427fb5c3445dbeba68b717ebee6b7a644d2e`:
+- generator reproducibility / clean diff: **PASS**;
+- canonical structural validator: **PASS — 11 locales × 35 keys**;
+- Python regression suite: **PASS — 31/31**;
+- R7 PowerShell source preflight: **PASS**;
+- whitespace integrity: **PASS**;
+- rendered Playwright QA: **PASS — 11 locales × 4 viewports = 44 rendered viewport checks**;
+- console errors: **0** across the rendered matrix;
+- page errors: **0** across the rendered matrix;
+- language selector geometry/target-size checks: **PASS**;
+- Persian RTL plus LTR email/phone isolation: **PASS**;
+- screenshot/summary artifact: `i18n-rendered-qa`, SHA-256 `d212abf1df00907a4f6a47512b5a7dfa7a14072eccdb3c825c420db8afabb086`.
+
+A manual montage review of the final mobile and desktop screenshots also found the candidate visually coherent: hero art remains intact, selector remains subordinate, longer scripts expand rather than clip, and Persian maintains a coherent RTL composition.
+
+**Pre-production qualification status: PASS.** This remains distinct from live-production verification and from independent native-speaker certification.

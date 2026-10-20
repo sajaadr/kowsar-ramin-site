@@ -62,4 +62,4 @@ Prepared on branch `i18n-localization-prep`:
 - Existing `/card` redirect, contact destinations, QR/UTM taxonomy and protected visual assets are unchanged.
 - Connector readback verified all 11 pages have correct `lang`/`dir`, locale canonical URL, resolved translation tokens, language selector and expected locale matrix.
 
-Remaining before production promotion: execute the full local R7 + i18n test suite, perform rendered viewport/RTL visual QA, correct any findings, then merge/promote with deployment readback.
+Pre-production qualification is now PASS after a fail→repair→rerun cycle. Remaining gate: merge the verified candidate to `main`, allow the existing Cloudflare Pages production path to deploy it, then perform live readback of all locale routes, `/card`, selector navigation, metadata, CSP/analytics and contact/share behavior.
