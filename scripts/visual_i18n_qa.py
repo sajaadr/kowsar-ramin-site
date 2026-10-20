@@ -30,6 +30,8 @@ VIEWPORTS = [
     ("narrow", 360, 640),
     ("mobile", 390, 844),
     ("tablet", 768, 1024),
+    ("laptop", 1366, 768),
+    ("user-desktop", 1416, 862),
     ("desktop", 1440, 1000),
 ]
 
@@ -112,16 +114,40 @@ def main():
                             pbb = panel.bounding_box()
                             if not pbb or pbb["x"] < -1 or pbb["x"] + pbb["width"] > width + 1:
                                 failures.append(f"{code}/{name}: language panel horizontal bounds {pbb}")
+                            panel_metrics = panel.evaluate("""el => ({
+                              clientH: el.clientHeight,
+                              scrollH: el.scrollHeight,
+                              clientW: el.clientWidth,
+                              scrollW: el.scrollWidth
+                            })""")
+                            if panel_metrics["scrollH"] > panel_metrics["clientH"] + 1:
+                                failures.append(f"{code}/{name}: language panel requires vertical scrolling {panel_metrics}")
+                            if panel_metrics["scrollW"] > panel_metrics["clientW"] + 1:
+                                failures.append(f"{code}/{name}: language panel requires horizontal scrolling {panel_metrics}")
                         for i in range(options.count()):
-                            ob=options.nth(i).bounding_box()
+                            opt = options.nth(i)
+                            ob = opt.bounding_box()
                             if ob and ob["height"] < 43:
                                 failures.append(f"{code}/{name}: option[{i}] target height {ob['height']}")
+                            exposed = opt.evaluate("""el => {
+                              const r = el.getBoundingClientRect();
+                              if (r.width <= 0 || r.height <= 0) return false;
+                              const x = Math.min(innerWidth - 1, Math.max(0, r.left + r.width / 2));
+                              const y = Math.min(innerHeight - 1, Math.max(0, r.top + r.height / 2));
+                              const hit = document.elementFromPoint(x, y);
+                              return r.top >= 0 && r.bottom <= innerHeight &&
+                                     r.left >= 0 && r.right <= innerWidth &&
+                                     !!hit && (hit === el || el.contains(hit));
+                            }""")
+                            if not exposed:
+                                failures.append(f"{code}/{name}: language option[{i}] clipped, offscreen or covered")
                     if console_errors:
                         failures.append(f"{code}/{name}: console errors {console_errors}")
                     if page_errors:
                         failures.append(f"{code}/{name}: page errors {page_errors}")
 
-                    if name in ("mobile","desktop"):
+                    if name in ("mobile","user-desktop","desktop"):
+                        page.screenshot(path=str(OUT / f"{code}-{name}-menu-open.png"), full_page=True)
                         page.locator(".language-menu").evaluate("(el) => el.removeAttribute('open')")
                         page.screenshot(path=str(OUT / f"{code}-{name}.png"), full_page=True)
                     locale_result[name] = {"console_errors": console_errors, "page_errors": page_errors}
