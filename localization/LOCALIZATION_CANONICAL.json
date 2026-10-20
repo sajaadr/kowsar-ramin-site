@@ -1,7 +1,7 @@
 {
   "schema": "KR_LOCALIZATION/1",
   "version": "1.0.1",
-  "authority_status": "CANDIDATE_PENDING_RELEASE",
+  "authority_status": "PRODUCTION_CANONICAL",
   "source_locale": "en",
   "prepared_date": "2026-10-20",
   "production_site": "https://kowsar-ramin.pages.dev/",
