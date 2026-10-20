@@ -98,7 +98,7 @@ class SiteIntegrationTests(unittest.TestCase):
     def test_service_copy(self):
         html = (SITE / "index.html").read_text(encoding="utf-8")
         expected = [
-            "Food &amp; hospitality · Massage &amp; wellbeing",
+            "Food &amp; hospitality · Wellbeing",
             "Live music duo · Events &amp; creative projects · Cultural exchange",
             "Woodwork &amp; carpentry · Interiors &amp; painting · Artisan craft",
         ]
