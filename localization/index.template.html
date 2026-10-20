@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#f7edda" />
+
+  <title>{{page.title}}</title>
+  <meta name="description" content="{{meta.description}}" />
+  {{hreflang_links}}
+  <link rel="canonical" href="{{canonical_url}}" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kowsar &amp; Ramin" />
+  <meta property="og:locale" content="{{og_locale}}" />
+  <meta property="og:title" content="{{meta.og_title}}" />
+  <meta property="og:description" content="{{meta.description}}" />
+  <meta property="og:url" content="{{canonical_url}}" />
+  <meta property="og:image" content="https://kowsar-ramin.pages.dev/assets/social-preview-1200x630.fcc87c79c255.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="{{meta.image_alt}}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{meta.og_title}}" />
+  <meta name="twitter:description" content="{{meta.twitter_description}}" />
+  <meta name="twitter:image" content="https://kowsar-ramin.pages.dev/assets/social-preview-1200x630.fcc87c79c255.jpg" />
+  <meta name="twitter:image:alt" content="{{meta.image_alt}}" />
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="shortcut icon" href="/assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
+
+  <link rel="preload" as="image" href="/assets/hero-mobile.26024fe148c4.webp" type="image/webp" media="(max-width: 719px)" />
+  <link rel="preload" as="image" href="/assets/hero-desktop.51bb0d5c0c1c.webp" type="image/webp" media="(min-width: 720px)" />
+
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://eu.i.posthog.com/static/array.js" defer></script>
+  <script src="/analytics.js" defer></script>
+  <script src="/contact.js" defer></script>
+</head>
+<body data-canonical-url="{{canonical_url}}" data-share-title="{{share.title}}" data-share-text="{{share.text}}" data-status-copied="{{status.copied}}" data-status-select-text="{{status.select_text_to_copy}}" data-status-link-copied="{{status.link_copied}}" data-status-copy-link="{{status.copy_this_link}}">
+  <main class="page">
+    <header class="hero" aria-labelledby="title">
+      {{language_menu}}
+      <div class="hero-art" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="identity">Kowsar &amp; Ramin</p>
+        <h1 id="title">
+          <span>{{hero.line1}}</span>
+          <span>{{hero.line2}}</span>
+        </h1>
+      </div>
+    </header>
+
+    <section class="identities" aria-label="{{aria.our_work}}">
+      <a class="identity-card identity-card--kowsar" data-analytics="instagram" data-profile="kowsar" href="https://www.instagram.com/kowsar_rahmanii/" target="_blank" rel="noopener noreferrer" aria-label="{{aria.open_kowsar_instagram}}">
+        <span class="identity-icon"><img src="/assets/kowsar-badge.webp" width="640" height="480" alt="" /></span>
+        <div class="identity-content">
+          <h2>Kowsar Rahmani</h2>
+          <p class="service-text">{{kowsar.services}}</p>
+          <span class="instagram-cta"><span class="instagram-cta-text">{{instagram.view}}</span><svg class="external-link-icon" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="M6 3H3.8A1.8 1.8 0 0 0 2 4.8v7.4A1.8 1.8 0 0 0 3.8 14h7.4a1.8 1.8 0 0 0 1.8-1.8V10M9 2h5v5M14 2 7.5 8.5" /></svg></span>
+        </div>
+      </a>
+
+      <a class="identity-card identity-card--together" data-analytics="instagram" data-profile="together" href="https://www.instagram.com/ramin.kow/" target="_blank" rel="noopener noreferrer" aria-label="{{aria.open_together_instagram}}">
+        <span class="identity-icon"><img src="/assets/together-badge.webp" width="640" height="480" alt="" /></span>
+        <div class="identity-content">
+          <h2>Together</h2>
+          <p class="service-text">{{together.services}}</p>
+          <span class="instagram-cta"><span class="instagram-cta-text">{{instagram.view}}</span><svg class="external-link-icon" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="M6 3H3.8A1.8 1.8 0 0 0 2 4.8v7.4A1.8 1.8 0 0 0 3.8 14h7.4a1.8 1.8 0 0 0 1.8-1.8V10M9 2h5v5M14 2 7.5 8.5" /></svg></span>
+        </div>
+      </a>
+
+      <a class="identity-card identity-card--ramin" data-analytics="instagram" data-profile="ramin" href="https://www.instagram.com/woodmerit/" target="_blank" rel="noopener noreferrer" aria-label="{{aria.open_ramin_instagram}}">
+        <span class="identity-icon"><img src="/assets/ramin-badge.webp" width="640" height="480" alt="" /></span>
+        <div class="identity-content">
+          <h2>Ramin Fahimi</h2>
+          <p class="service-text">{{ramin.services}}</p>
+          <span class="instagram-cta"><span class="instagram-cta-text">{{instagram.view}}</span><svg class="external-link-icon" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="M6 3H3.8A1.8 1.8 0 0 0 2 4.8v7.4A1.8 1.8 0 0 0 3.8 14h7.4a1.8 1.8 0 0 0 1.8-1.8V10M9 2h5v5M14 2 7.5 8.5" /></svg></span>
+        </div>
+      </a>
+    </section>
+
+    <nav class="actions" aria-label="{{aria.primary_links}}">
+      <a class="button primary" data-analytics="cta" data-target="portfolio" href="https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu">{{cta.portfolio}}</a>
+      <a class="button secondary" data-analytics="cta" data-target="whatsapp" href="https://wa.me/989183871647">WhatsApp</a>
+    </nav>
+
+    <section class="contact-card" aria-labelledby="contact-title">
+      <p class="contact-intent">{{contact.intent}}</p>
+
+      <div class="contact-grid">
+        <div class="contact-group">
+          <span id="contact-title" class="contact-label">{{contact.label}}</span>
+          <div class="contact-row">
+            <a class="add-contact" data-analytics="contact" data-method="save_contact" href="/assets/kowsar-rahmani.vcf" download>
+              <span>{{contact.save}}</span>
+              <span class="contact-icon-button add-contact-icon-button" aria-hidden="true">
+                <svg class="add-contact-icon" viewBox="0 0 18 18" fill="none"><rect x="3" y="2.5" width="11" height="13" rx="2"/><circle cx="8.5" cy="7" r="2"/><path d="M5.5 12c.8-1.3 1.8-2 3-2s2.2.7 3 2M14 6h1.5M14 9h1.5M14 12h1.5"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-group">
+          <span class="contact-label">{{contact.email}}</span>
+          <div class="contact-row">
+            <a id="contact-email" class="contact-value" dir="ltr" data-analytics="contact" data-method="email" href="mailto:kosar.rahmani@gmail.com">kosar.rahmani@gmail.com</a>
+            <button class="contact-icon-button copy-button" type="button" data-copy-target="contact-email" aria-label="{{aria.copy_email}}">
+              <svg class="copy-icon" aria-hidden="true" viewBox="0 0 18 18" fill="none"><rect x="6" y="5" width="8" height="9" rx="1.5"/><path d="M4 12H3.5A1.5 1.5 0 0 1 2 10.5v-7A1.5 1.5 0 0 1 3.5 2h7A1.5 1.5 0 0 1 12 3.5V4"/></svg>
+              <svg class="copy-check" aria-hidden="true" viewBox="0 0 18 18" fill="none"><path d="m4 9 3 3 7-7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="contact-group">
+          <span class="contact-label">{{contact.phone}}</span>
+          <div class="contact-row">
+            <a id="contact-phone" class="contact-value" dir="ltr" data-analytics="contact" data-method="phone" href="tel:+989183871647">+98 918 387 1647</a>
+            <button class="contact-icon-button copy-button" type="button" data-copy-target="contact-phone" aria-label="{{aria.copy_phone}}">
+              <svg class="copy-icon" aria-hidden="true" viewBox="0 0 18 18" fill="none"><rect x="6" y="5" width="8" height="9" rx="1.5"/><path d="M4 12H3.5A1.5 1.5 0 0 1 2 10.5v-7A1.5 1.5 0 0 1 3.5 2h7A1.5 1.5 0 0 1 12 3.5V4"/></svg>
+              <svg class="copy-check" aria-hidden="true" viewBox="0 0 18 18" fill="none"><path d="m4 9 3 3 7-7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="status-message" aria-live="polite" role="status"></p>
+    </section>
+
+    <section class="share-section" aria-labelledby="share-heading">
+      <p id="share-heading" class="share-prompt">{{share.prompt}}</p>
+      <button id="share-page" class="share-button" type="button">
+        <span>{{share.button}}</span>
+        <svg class="share-icon" aria-hidden="true" viewBox="0 0 20 20" fill="none">
+          <circle cx="15.5" cy="4.5" r="2.2"/>
+          <circle cx="4.5" cy="10" r="2.2"/>
+          <circle cx="15.5" cy="15.5" r="2.2"/>
+          <path d="m6.5 9 7-3.5M6.5 11l7 3.5"/>
+        </svg>
+      </button>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,9 +1,13 @@
 (() => {
   const status = document.querySelector('[aria-live]');
+  const page = document.body?.dataset || {};
   const canonicalUrl = 'https://kowsar-ramin.pages.dev/';
-  const shareUrl = canonicalUrl + '?utm_source=share&utm_medium=referral&utm_campaign=kowsar_ramin';
+  const pageCanonicalUrl = page.canonicalUrl || canonicalUrl;
+  const shareUrl = pageCanonicalUrl + '?utm_source=share&utm_medium=referral&utm_campaign=kowsar_ramin';
   const shareTitle = 'Meet Kowsar & Ramin — Work & Collaboration';
   const shareText = 'Kowsar & Ramin work across hospitality, wellbeing, craftsmanship, music and creative projects, and welcome bookings, commissions, collaborations and selected volunteer opportunities.';
+  const localizedShareTitle = page.shareTitle || shareTitle;
+  const localizedShareText = page.shareText || shareText;
   let clearStatus;
 
   const announce = (message) => {
@@ -55,10 +59,10 @@
       if (copied) {
         window.krAnalytics?.capture('contact_action', { method: button.dataset.copyTarget === 'contact-email' ? 'copy_email' : 'copy_phone' });
         button.classList.add('is-copied');
-        announce('Copied');
+        announce(page.statusCopied || 'Copied');
         window.setTimeout(() => button.classList.remove('is-copied'), 1800);
       } else {
-        announce('Select the text to copy');
+        announce(page.statusSelectText || 'Select the text to copy');
       }
     });
   });
@@ -69,8 +73,8 @@
     if (navigator.share) {
       try {
         await navigator.share({
-          title: shareTitle,
-          text: shareText,
+          title: localizedShareTitle,
+          text: localizedShareText,
           url: shareUrl,
         });
         window.krAnalytics?.capture('share_action', { method: 'native_completed' });
@@ -87,6 +91,6 @@
       copied = fallbackCopy(shareUrl);
     }
     if (copied) window.krAnalytics?.capture('share_action', { method: 'fallback_copied' });
-    announce(copied ? 'Link copied' : 'Copy this link: ' + shareUrl);
+    announce(copied ? (page.statusLinkCopied || 'Link copied') : (page.statusCopyLink || 'Copy this link:') + ' ' + shareUrl);
   });
 })();
