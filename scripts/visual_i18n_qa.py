@@ -27,12 +27,14 @@ def start_server():
     return server
 
 VIEWPORTS = [
+    ("small-phone", 320, 568),
     ("narrow", 360, 640),
     ("mobile", 390, 844),
     ("tablet", 768, 1024),
     ("laptop", 1366, 768),
     ("user-desktop", 1416, 862),
     ("desktop", 1440, 1000),
+    ("wide-desktop", 1920, 1080),
 ]
 
 def main():
@@ -95,6 +97,19 @@ def main():
                             failures.append(f"{code}/{name}: compact[{idx}] horizontal overflow {box}")
                     if code == "fa" and (metrics["emailDir"] != "ltr" or metrics["phoneDir"] != "ltr"):
                         failures.append(f"fa/{name}: mixed-Latin contact fields not LTR")
+
+                    if code == "fa":
+                        font_state = page.evaluate("""() => {
+                          const face = [...document.fonts].find(
+                            item => item.family.replace(/["']/g, '') === 'KR Estedad'
+                          );
+                          return {
+                            family: getComputedStyle(document.body).fontFamily,
+                            face: face ? face.status : 'missing',
+                          };
+                        }""")
+                        if "KR Estedad" not in font_state["family"] or font_state["face"] != "loaded":
+                            failures.append(f"fa/{name}: font not loaded {font_state}")
 
                     trigger = page.locator(".language-menu summary")
                     if not trigger.is_visible():

@@ -35,10 +35,11 @@ ${items}          </ul>
 }
 function render(code){
   const d=data.locales[code];
-  const values={lang:d.bcp47,dir:d.dir,og_locale:d.og_locale,canonical_url:urlFor(code),hreflang_links:hreflangs(),language_menu:menu(code),...d.messages};
+  const fontPreload=code==='fa' ? '  <link rel="preload" href="/assets/estedad-v8.5-01db924b.woff2" as="font" type="font/woff2" crossorigin />\n' : '';
+  const values={lang:d.bcp47,dir:d.dir,og_locale:d.og_locale,canonical_url:urlFor(code),hreflang_links:hreflangs(),language_menu:menu(code),font_preload:fontPreload,...d.messages};
   return template.replace(/\{\{([^}]+)\}\}/g,(m,k)=>{
     if(!(k in values)) throw new Error('Unresolved token '+k);
-    return (k==='hreflang_links'||k==='language_menu') ? values[k] : esc(values[k]);
+    return (k==='hreflang_links'||k==='language_menu'||k==='font_preload') ? values[k] : esc(values[k]);
   });
 }
 for(const code of data.locale_order){

@@ -111,6 +111,30 @@ class I18nTests(unittest.TestCase):
                     "meta.image_alt", "share.title", "share.text"):
             self.assertIn("کوثر و رامین", persian[key])
 
+    def test_self_hosted_estedad_font_integrity(self):
+        import hashlib
+        font = SITE / "assets" / "estedad-v8.5-01db924b.woff2"
+        self.assertTrue(font.is_file())
+        raw = font.read_bytes()
+        self.assertEqual(len(raw), 120924)
+        self.assertEqual(
+            hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest(),
+            "01db924b1aa7dea3ab62814d50e73440957df7d3")
+        css = (SITE / "styles.css").read_text(encoding="utf-8")
+        self.assertIn('font-family: "KR Estedad"', css)
+        self.assertIn('url("/assets/estedad-v8.5-01db924b.woff2") format("woff2")', css)
+        self.assertIn('font-display: swap', css)
+        self.assertNotIn('cdn.jsdelivr.net', css)
+        self.assertIn('html[lang="fa"] body', css)
+        for code in DATA["locale_order"]:
+            html = page_path(code).read_text(encoding="utf-8")
+            has_preload = '<link rel="preload" href="/assets/estedad-v8.5-01db924b.woff2"' in html
+            self.assertEqual(has_preload, code == "fa")
+        headers = (SITE / "_headers").read_text(encoding="utf-8")
+        self.assertIn("style-src 'self';", headers)
+        self.assertNotIn('font-src https://', headers)
+        self.assertTrue((ROOT / "localization" / "licenses" / "Estedad-OFL-1.1.txt").is_file())
+
     def test_dynamic_localization_data_present(self):
         attrs = [
             "data-share-title", "data-share-text", "data-status-copied",
