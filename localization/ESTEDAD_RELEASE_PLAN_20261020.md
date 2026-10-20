@@ -1,3 +1,5 @@
+> **Release status: DEPLOYED 2026-10-20.** Approved Estedad font promoted in PR #8, production merge `d5c22fdea1a14fdc81cc731724250513312f5b17`. This file is the original implementation plan and provenance evidence; consult the repository README and latest GitHub PR checks for current running state.
+
 # Estedad final release candidate — 2026-10-20
 
 Owner selected Estedad after preview comparison (PRs #6 and #7).

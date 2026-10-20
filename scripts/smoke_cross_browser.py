@@ -47,7 +47,10 @@ def run():
                                     font:getComputedStyle(document.body).fontFamily,
                                     cards:document.querySelectorAll('.identity-card').length,
                                     contactEmail:getComputedStyle(document.querySelector('#contact-email')).direction,
-                                    contactPhone:getComputedStyle(document.querySelector('#contact-phone')).direction
+                                    contactPhone:getComputedStyle(document.querySelector('#contact-phone')).direction,
+                                    images:[...document.querySelectorAll('.identity-icon img')].map(img=>({loaded:img.complete && img.naturalWidth>0})),
+                                    actions:[...document.querySelectorAll('.actions a')].map(a=>a.getAttribute('href')),
+                                    saveHref:document.querySelector('.add-contact')?.getAttribute('href')
                                 };
                             }""")
                             if info["lang"]!=code or info["dir"]!=DATA["locales"][code]["dir"]:
@@ -56,6 +59,13 @@ def run():
                                 failures.append(f"{engine}/{mode}/{code}: horizontal overflow")
                             if info["cards"]!=3:
                                 failures.append(f"{engine}/{mode}/{code}: card count")
+                            if len(info["images"])!=3 or not all(img["loaded"] for img in info["images"]):
+                                failures.append(f"{engine}/{mode}/{code}: missing or broken profile badge image")
+                            if info["actions"]!=[
+                                "https://gamma.app/docs/Kowsar-Ramin-t1p9tj36i3krncu",
+                                "https://wa.me/989183871647",
+                            ] or info["saveHref"]!="/assets/kowsar-rahmani.vcf":
+                                failures.append(f"{engine}/{mode}/{code}: primary action destination drift")
                             if code=="fa":
                                 if "KR Estedad" not in info["font"]:
                                     failures.append(f"{engine}/{mode}/{code}: font family")
@@ -74,6 +84,19 @@ def run():
                                     failures.append(f"{engine}/{mode}/{code}: selector")
                             if errors:
                                 failures.append(f"{engine}/{mode}/{code}: script errors {errors}")
+                            # Exercise one real language change per route and viewport.
+                            # A present/hittable option alone does not prove navigation works.
+                            target=DATA["locale_order"][(DATA["locale_order"].index(code)+1) % len(DATA["locale_order"])]
+                            target_route=DATA["route_policy"][target]
+                            try:
+                                page.locator(f'.language-option[data-language="{target}"]').click(timeout=10000)
+                                page.wait_for_load_state("domcontentloaded")
+                                if not page.url.split("?",1)[0].endswith(target_route):
+                                    failures.append(f"{engine}/{mode}/{code}: language click did not navigate to {target_route}")
+                                elif page.locator("html").get_attribute("lang")!=DATA["locales"][target]["bcp47"]:
+                                    failures.append(f"{engine}/{mode}/{code}: language click rendered wrong locale")
+                            except Exception as exc:
+                                failures.append(f"{engine}/{mode}/{code}: language click failed {str(exc)[:140]}")
                             context.close()
                 finally:
                     browser.close()

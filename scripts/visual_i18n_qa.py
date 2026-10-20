@@ -161,7 +161,7 @@ def main():
                     if page_errors:
                         failures.append(f"{code}/{name}: page errors {page_errors}")
 
-                    if name in ("mobile","user-desktop","desktop"):
+                    if name in ("small-phone","mobile","user-desktop","desktop","wide-desktop"):
                         page.screenshot(path=str(OUT / f"{code}-{name}-menu-open.png"), full_page=True)
                         page.locator(".language-menu").evaluate("(el) => el.removeAttribute('open')")
                         page.screenshot(path=str(OUT / f"{code}-{name}.png"), full_page=True)
