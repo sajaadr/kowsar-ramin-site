@@ -48,3 +48,18 @@ jobs:
           path: qa-artifacts/i18n-visual/
           if-no-files-found: warn
           retention-days: 14
+
+  cross-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser QA dependency
+        run: pip install playwright
+      - name: Install Firefox and WebKit
+        run: python -m playwright install --with-deps firefox webkit
+      - name: Check 11 languages on mobile and desktop in Firefox and WebKit
+        run: python scripts/smoke_cross_browser.py
