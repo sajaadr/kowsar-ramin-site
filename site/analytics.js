@@ -9,6 +9,7 @@
     contact_action: { method: ['email', 'phone', 'copy_email', 'copy_phone', 'save_contact'] },
     share_action: { method: ['requested', 'native_completed', 'fallback_copied'] },
     section_viewed: { section: ['contact'] },
+    language_selected: { language: ['en', 'tr', 'de', 'es', 'pt', 'it', 'fa', 'fr', 'az', 'hy', 'ka'] },
   });
 
   const sanitizeUrl = (value) => {
@@ -88,6 +89,7 @@
       if (kind === 'cta') capture('cta_clicked', { target: element.dataset.target });
       if (kind === 'instagram') capture('instagram_clicked', { profile: element.dataset.profile });
       if (kind === 'contact') capture('contact_action', { method: element.dataset.method });
+      if (kind === 'language') capture('language_selected', { language: element.dataset.language });
     });
   });
 
