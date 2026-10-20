@@ -73,3 +73,16 @@ Pre-production qualification is now PASS after a fail→repair→rerun cycle. Re
 - Connected-browser production readback of `https://kowsar-ramin.pages.dev/`: **PASS**; the live page exposes the globe language selector and all 11 native-language choices, and the approved English Kowsar line is `Food & hospitality · Culture & wellbeing`.
 - Main-tree verification confirms the root page plus all ten non-English locale `index.html` files are present in the deployed commit.
 - The direct per-locale HTTP bodies could not be independently fetched by the available web reader, so route existence is grounded by the exact deployed Git tree + successful Cloudflare Pages deployment rather than by eleven separate external GET receipts.
+
+## Language-menu UX correction — 2026-10-20
+
+User production review found the selector visually clipped at Chrome 100% despite all 11 language links existing in the DOM. Root cause was ancestor clipping from `.hero { overflow: hidden; }`.
+
+Final design:
+- hero allows selector overflow;
+- hero artwork alone retains clipping/radius;
+- desktop/laptop menu is two columns and exposes all 11 options without scrolling;
+- mobile remains one column and viewport bounded;
+- QA now includes the user-observed 1416×862 viewport and per-option hit-testing.
+
+Fix merged at `c7608561b3cf5bdd0325c26c65640ad88095b35b`; Cloudflare deployment `941d98ae-7981-4673-b1af-334268590c5d` succeeded.
