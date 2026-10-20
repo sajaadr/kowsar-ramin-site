@@ -1,7 +1,7 @@
 # Kowsar & Ramin Multilingual Production Receipt — 2026-10-20
 
 ## Decision
-**PRODUCTION PASS** for the 11-locale static multilingual implementation.
+**PRODUCTION PASS — AMENDED AFTER USER-SURFACED SELECTOR DEFECT.** The 11-locale implementation remains valid, and the language-menu visibility defect has been corrected, requalified, and redeployed.
 
 ## Production identity
 - Repository: `sajaadr/kowsar-ramin-site`
@@ -51,3 +51,27 @@ The 9.8–10.0 linguistic scores in the QA report are internal expert-model revi
 
 ## Readback limitation
 The available public web reader could not directly fetch each Cloudflare locale route. Route deployment is therefore verified through the exact deployed Git tree, successful Cloudflare Pages check, generated-route tests, and live root selector readback rather than eleven separate external HTTP body receipts.
+
+## Amendment — language-menu clipping fix
+
+A production screenshot at Chrome 100% showed that the original language menu was clipped by the hero's `overflow: hidden`. The DOM contained all 11 locales, but only the upper part of the list was visible and `Italiano` was partially cut off.
+
+Corrective production release:
+- Fix PR: `#3`
+- Fix branch candidate: `32dd724eacefd4618d72f60f63d53fc06adb2fcb`
+- Final production merge commit: `c7608561b3cf5bdd0325c26c65640ad88095b35b`
+- Cloudflare Pages deployment: `941d98ae-7981-4673-b1af-334268590c5d`
+- Cloudflare deployment check: **success / Deployed successfully**
+- Preview URL: `https://941d98ae.kowsar-ramin.pages.dev`
+
+Strengthened evidence:
+- 11 locales × 6 viewports = **66 rendered viewport checks PASS**;
+- includes the reported **1416×862** viewport and 1366×768 laptop viewport;
+- every language option required to be fully inside the viewport and directly hit-testable;
+- desktop/laptop menu required to show all 11 options without panel scrolling;
+- mobile menu required to remain viewport-contained;
+- Python regression: **31/31 PASS**;
+- R7 source/security/privacy preflight: **PASS**;
+- rendered artifact SHA-256: `9f9c85981328f54465a43ebe93a85e3830b2fe06603a44504e7aeed64bff941b`.
+
+The defect was therefore not a missing-language/content problem. It was a CSS ancestor-clipping problem, now fixed at the layout root and guarded by stronger regression tests.

@@ -71,3 +71,35 @@ Final qualifying runs for commit `8152427fb5c3445dbeba68b717ebee6b7a644d2e`:
 A manual montage review of the final mobile and desktop screenshots also found the candidate visually coherent: hero art remains intact, selector remains subordinate, longer scripts expand rather than clip, and Persian maintains a coherent RTL composition.
 
 **Pre-production qualification status: PASS.** This remains distinct from live-production verification and from independent native-speaker certification.
+
+## Production language-menu incident and corrective qualification — 2026-10-20
+
+A real Chrome 100% screenshot at approximately **1416×862** exposed a production defect that the initial selector QA had not actually ruled out: the language panel contained all 11 options in the DOM, but the hero container had `overflow: hidden`, so the lower options were visually clipped at the hero boundary. This made only the first several languages visible; `Italiano` was partially cut off. The earlier selector test checked option count, panel horizontal bounds and target height, but did **not** prove that every option was visually exposed and hittable after ancestor clipping.
+
+Root-cause repair:
+- hero container now permits overflow so the language panel can escape the hero;
+- hero artwork itself receives the clipping/radius, preserving the rounded visual treatment;
+- desktop/laptop selector uses a compact **two-column** panel showing all 11 languages without scrolling;
+- mobile selector remains one column with an explicit viewport-bounded overlay;
+- selector z-index was raised above the following cards;
+- the QA matrix added 1366×768 and the reported 1416×862 viewport;
+- each language option is now tested with viewport bounds **and** `elementFromPoint` hit-testing;
+- panel scroll dimensions are checked so desktop/laptop must not require hidden vertical or horizontal scrolling;
+- open-menu screenshots are captured for mobile, 1416×862 and desktop.
+
+Corrective qualification for commit `32dd724eacefd4618d72f60f63d53fc06adb2fcb`:
+- canonical validator: **PASS — 11 locales × 35 keys**;
+- Python regression: **31/31 PASS**;
+- R7 source/security/privacy preflight: **PASS**;
+- whitespace integrity: **PASS**;
+- rendered selector/site QA: **PASS — 11 locales × 6 viewports = 66 rendered viewport checks**;
+- viewports: 360×640, 390×844, 768×1024, 1366×768, **1416×862**, 1440×1000;
+- every language option visible/hittable: **PASS**;
+- desktop/laptop panel no-scroll requirement: **PASS**;
+- mobile panel viewport containment: **PASS**;
+- console/page errors: **0**;
+- evidence artifact SHA-256: `9f9c85981328f54465a43ebe93a85e3830b2fe06603a44504e7aeed64bff941b`.
+
+Manual review of the 1416×862 open-menu screenshot confirms all 11 languages are fully visible in the two-column panel, including `Italiano`, `فارسی`, `Français`, `Azərbaycanca`, `Հայերեն` and `ქართული`.
+
+**Corrective UX qualification: PASS.**
