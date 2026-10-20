@@ -1,0 +1,50 @@
+name: i18n qualification
+
+on:
+  push:
+    branches: [i18n-localization-prep]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python QA dependencies
+        run: pip install pillow playwright
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Regenerate locale pages and require clean output
+        run: |
+          node scripts/build-i18n.mjs
+          git diff --exit-code
+      - name: Canonical localization checks
+        run: python scripts/check-i18n.py
+      - name: Python regression suite
+        run: python -m unittest discover -s tests -v
+      - name: PowerShell source verification
+        shell: pwsh
+        run: ./scripts/verify-source.ps1
+      - name: Whitespace integrity
+        run: git diff --check
+      - name: Rendered multilingual visual QA
+        run: python scripts/visual_i18n_qa.py
+      - name: Upload rendered QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i18n-rendered-qa
+          path: qa-artifacts/i18n-visual/
+          if-no-files-found: error
+          retention-days: 14

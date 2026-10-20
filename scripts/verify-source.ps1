@@ -102,7 +102,7 @@ foreach ($forbidden in @('posthog.identify', '.identify(', '.alias(', '$set', '$
 }
 
 $script = Get-Content -LiteralPath (Join-Path $Site 'contact.js') -Raw
-foreach ($needle in @('navigator.share', 'navigator.clipboard', "document.execCommand('copy')", "const shareTitle = 'Meet Kowsar & Ramin — Work & Collaboration'", "const canonicalUrl = 'https://kowsar-ramin.pages.dev/'", "announce(copied ? 'Link copied'")) {
+foreach ($needle in @('navigator.share', 'navigator.clipboard', "document.execCommand('copy')", "const shareTitle = 'Meet Kowsar & Ramin — Work & Collaboration'", "const canonicalUrl = 'https://kowsar-ramin.pages.dev/'", 'page.statusLinkCopied', 'localizedShareTitle', 'localizedShareText')) {
   if (-not $script.Contains($needle)) { throw "contact.js missing: $needle" }
 }
 
