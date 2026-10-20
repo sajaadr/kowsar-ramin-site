@@ -63,3 +63,13 @@ Prepared on branch `i18n-localization-prep`:
 - Connector readback verified all 11 pages have correct `lang`/`dir`, locale canonical URL, resolved translation tokens, language selector and expected locale matrix.
 
 Pre-production qualification is now PASS after a fail→repair→rerun cycle. Remaining gate: merge the verified candidate to `main`, allow the existing Cloudflare Pages production path to deploy it, then perform live readback of all locale routes, `/card`, selector navigation, metadata, CSP/analytics and contact/share behavior.
+
+## Production promotion checkpoint — 2026-10-20
+
+- PR #1 merged to `main` at `53f130c20394948c41d1731fa1bd3b034fa68400`.
+- Cloudflare Pages check for that exact merge commit: **SUCCESS**.
+- Cloudflare deployment ID: `c30a3675-ef4b-4439-b4a3-7fcfbe800111`.
+- Preview deployment: `https://c30a3675.kowsar-ramin.pages.dev`.
+- Connected-browser production readback of `https://kowsar-ramin.pages.dev/`: **PASS**; the live page exposes the globe language selector and all 11 native-language choices, and the approved English Kowsar line is `Food & hospitality · Culture & wellbeing`.
+- Main-tree verification confirms the root page plus all ten non-English locale `index.html` files are present in the deployed commit.
+- The direct per-locale HTTP bodies could not be independently fetched by the available web reader, so route existence is grounded by the exact deployed Git tree + successful Cloudflare Pages deployment rather than by eleven separate external GET receipts.
