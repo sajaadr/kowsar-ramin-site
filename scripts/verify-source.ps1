@@ -31,7 +31,7 @@ if ($activeRules.Count -ne 1 -or $activeRules[0] -cne '/card /?utm_source=busine
 $html = Get-Content -LiteralPath (Join-Path $Site 'index.html') -Raw
 $mustContain = @(
   'Kowsar &amp; Ramin', '<span>We build, nourish &amp; bring</span>', '<span>spaces to life.</span>',
-  'Food &amp; hospitality · Wellbeing',
+  'Food &amp; hospitality · Culture &amp; wellbeing',
   'Live music duo · Events &amp; creative projects · Cultural exchange',
   'Woodwork &amp; carpentry · Interiors &amp; painting · Artisan craft',
   'Save Contact', '+98 918 387 1647', 'tel:+989183871647',
