@@ -46,3 +46,20 @@ One Git revert returns to English-only production. The printed QR remains unchan
 
 ## Promotion boundary
 This branch is preparation/candidate work only. It does not alter production until merged to `main`.
+
+## Current candidate status
+
+Prepared on branch `i18n-localization-prep`:
+
+- 11 locale routes are generated in the branch.
+- Root English page includes the globe/current-language selector.
+- Locale pages include localized visible copy, metadata, share text, status text and accessibility labels.
+- Persian is emitted with `dir="rtl"`; email and phone values are isolated LTR.
+- All pages contain the full native-name language selector and reciprocal `hreflang` links plus `x-default`.
+- Shared CSS contains responsive selector styling with 44px+ targets and RTL placement.
+- Shared contact logic reads localized page data while preserving English fallbacks and existing share attribution.
+- Analytics adds only a bounded `language_selected` event with the fixed 11-locale enum.
+- Existing `/card` redirect, contact destinations, QR/UTM taxonomy and protected visual assets are unchanged.
+- Connector readback verified all 11 pages have correct `lang`/`dir`, locale canonical URL, resolved translation tokens, language selector and expected locale matrix.
+
+Remaining before production promotion: execute the full local R7 + i18n test suite, perform rendered viewport/RTL visual QA, correct any findings, then merge/promote with deployment readback.
