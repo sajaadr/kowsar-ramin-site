@@ -18,7 +18,7 @@ class I18nTests(unittest.TestCase):
     def test_locale_and_key_parity(self):
         self.assertEqual(DATA["locale_order"], ["en","tr","de","es","pt","it","fa","fr","az","hy","ka"])
         keys = set(DATA["locales"]["en"]["messages"])
-        self.assertEqual(len(keys), 35)
+        self.assertEqual(len(keys), 39)
         for code in DATA["locale_order"]:
             messages = DATA["locales"][code]["messages"]
             self.assertEqual(set(messages), keys, code)
@@ -71,6 +71,45 @@ class I18nTests(unittest.TestCase):
         fa = page_path("fa").read_text(encoding="utf-8")
         self.assertIn('id="contact-email" class="contact-value" dir="ltr"', fa)
         self.assertIn('id="contact-phone" class="contact-value" dir="ltr"', fa)
+
+
+    def test_translated_duo_and_persian_personal_names(self):
+        labels = {
+            "en": "Together", "tr": "Birlikte", "de": "Gemeinsam",
+            "es": "Juntos", "pt": "Juntos", "it": "Insieme",
+            "fa": "با هم", "fr": "Ensemble", "az": "Birlikdə",
+            "hy": "Միասին", "ka": "ერთად",
+        }
+        for code, label in labels.items():
+            with self.subTest(locale=code):
+                msg = DATA["locales"][code]["messages"]
+                html = page_path(code).read_text(encoding="utf-8")
+                self.assertEqual(msg["together.name"], label)
+                self.assertIn(f'<h2>{html_escape(label)}</h2>', html)
+                self.assertIn(
+                    f'<p class="identity">{html_escape(msg["site.identity"])}</p>', html)
+                self.assertIn(
+                    f'<meta property="og:site_name" content="{html_escape(msg["site.identity"])}" />',
+                    html)
+                self.assertIn(html_escape(msg["kowsar.name"]), html)
+                self.assertIn(html_escape(msg["ramin.name"]), html)
+                self.assertIn(html_escape(msg["aria.open_together_instagram"]), html)
+                if code != "en":
+                    self.assertNotIn("<h2>Together</h2>", html)
+                    self.assertNotIn("Together", msg["aria.open_together_instagram"])
+
+        persian = DATA["locales"]["fa"]["messages"]
+        self.assertEqual(persian["site.identity"], "کوثر و رامین")
+        self.assertEqual(persian["kowsar.name"], "کوثر رحمانی")
+        self.assertEqual(persian["ramin.name"], "رامین فهیمی")
+        fa_html = page_path("fa").read_text(encoding="utf-8")
+        for name in ("کوثر و رامین", "کوثر رحمانی", "رامین فهیمی", "با هم"):
+            self.assertIn(name, fa_html)
+        for latin in ("Kowsar & Ramin", "Kowsar Rahmani", "Ramin Fahimi"):
+            self.assertNotIn(latin, fa_html)
+        for key in ("page.title", "meta.description", "meta.og_title",
+                    "meta.image_alt", "share.title", "share.text"):
+            self.assertIn("کوثر و رامین", persian[key])
 
     def test_dynamic_localization_data_present(self):
         attrs = [
